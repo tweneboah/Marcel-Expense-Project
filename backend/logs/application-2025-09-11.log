@@ -1,0 +1,520 @@
+2025-09-11 14:00:31 [DEBUG]: Logging initialized at debug level {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:31 [INFO]: Server running in development mode on port 5000 {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:43 [HTTP]: GET /api/v1/settings [33m401[0m 3.141ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:43 [HTTP]: GET /api/v1/settings [33m401[0m 0.818ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:43 [HTTP]: GET /api/v1/auth/me [33m401[0m 0.704ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:53 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Invalid credentials",
+  "path": "/api/v1/auth/login",
+  "method": "POST",
+  "ip": "::1",
+  "stack": "Error: Invalid credentials\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/auth.js:49:11\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(request body present)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:53 [HTTP]: POST /api/v1/auth/login [33m401[0m 25.616ms {"email":"admin@gmail.com","password":"[REDACTED]"} {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:53 [HTTP]: GET /api/v1/settings [33m401[0m 0.181ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:00:53 [HTTP]: GET /api/v1/settings [33m401[0m 0.306ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:35 [HTTP]: POST /api/v1/auth/login [32m200[0m 128.080ms {"email":"sam@gmail.com","password":"[REDACTED]"} {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:36 [HTTP]: GET /api/v1/settings [32m200[0m 22.144ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:36 [HTTP]: GET /api/v1/settings [32m304[0m 7.713ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:36 [HTTP]: GET /api/v1/analytics/dashboard [32m200[0m 143.401ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:36 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 20.204ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:49 [HTTP]: GET /api/v1/settings [32m304[0m 9.554ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:49 [HTTP]: GET /api/v1/settings [32m304[0m 2.698ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:49 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 38.871ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:01:49 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 22.170ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:03 [HTTP]: GET /api/v1/settings [32m304[0m 61.243ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:03 [HTTP]: GET /api/v1/settings [32m304[0m 2.667ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:03 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 70.456ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:04 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 43.379ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:57 [HTTP]: GET /api/v1/settings [32m304[0m 14.114ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:57 [HTTP]: GET /api/v1/settings [32m304[0m 2.746ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:58 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 24.049ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:06:58 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 22.928ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings [32m304[0m 7.175ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of accommodationAllowance",
+  "path": "/api/v1/settings/key/accommodationAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of accommodationAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/accommodationAllowance [33m404[0m 7.728ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of costPerKilometer",
+  "path": "/api/v1/settings/key/costPerKilometer",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of costPerKilometer\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/costPerKilometer [33m404[0m 14.138ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings [32m304[0m 10.823ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of cateringAllowance",
+  "path": "/api/v1/settings/key/cateringAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of cateringAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/cateringAllowance [33m404[0m 13.132ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of costPerKilometer",
+  "path": "/api/v1/settings/key/costPerKilometer",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of costPerKilometer\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/costPerKilometer [33m404[0m 9.174ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of accommodationAllowance",
+  "path": "/api/v1/settings/key/accommodationAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of accommodationAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/accommodationAllowance [33m404[0m 11.903ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of cateringAllowance",
+  "path": "/api/v1/settings/key/cateringAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of cateringAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:00 [HTTP]: GET /api/v1/settings/key/cateringAllowance [33m404[0m 6.387ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:10 [HTTP]: GET /api/v1/settings [32m304[0m 13.881ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:20 [HTTP]: GET /api/v1/settings [32m304[0m 6.362ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings [32m304[0m 18.419ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of costPerKilometer",
+  "path": "/api/v1/settings/key/costPerKilometer",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of costPerKilometer\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/costPerKilometer [33m404[0m 18.966ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of cateringAllowance",
+  "path": "/api/v1/settings/key/cateringAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of cateringAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/cateringAllowance [33m404[0m 13.935ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings [32m304[0m 6.453ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of accommodationAllowance",
+  "path": "/api/v1/settings/key/accommodationAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of accommodationAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/accommodationAllowance [33m404[0m 12.961ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of costPerKilometer",
+  "path": "/api/v1/settings/key/costPerKilometer",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of costPerKilometer\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/costPerKilometer [33m404[0m 8.636ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of cateringAllowance",
+  "path": "/api/v1/settings/key/cateringAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of cateringAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/cateringAllowance [33m404[0m 10.926ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings [32m304[0m 7.541ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [ERROR]: Error encountered {
+  "errorName": "Error",
+  "errorMessage": "Setting not found with key of accommodationAllowance",
+  "path": "/api/v1/settings/key/accommodationAllowance",
+  "method": "GET",
+  "ip": "::1",
+  "stack": "Error: Setting not found with key of accommodationAllowance\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/controllers/settings.js:136:7\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)",
+  "body": "(no request body)",
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:25 [HTTP]: GET /api/v1/settings/key/accommodationAllowance [33m404[0m 7.437ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:29 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 19.517ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:07:29 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 17.887ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:40 [HTTP]: GET /api/v1/settings [32m304[0m 21.239ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:40 [HTTP]: GET /api/v1/settings [32m304[0m 2.284ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:41 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 23.490ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:41 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 26.635ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:56 [HTTP]: GET /api/v1/settings [33m401[0m 0.802ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:08:56 [HTTP]: GET /api/v1/settings [33m401[0m 0.127ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:07 [HTTP]: GET /api/v1/auth/logout [32m200[0m 4.566ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:07 [HTTP]: GET /api/v1/settings [33m401[0m 0.315ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:07 [HTTP]: GET /api/v1/settings [33m401[0m 0.270ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:16 [HTTP]: POST /api/v1/auth/login [32m200[0m 117.855ms {"email":"sam@gmail.com","password":"[REDACTED]"} {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:16 [HTTP]: GET /api/v1/settings [32m304[0m 14.771ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:16 [HTTP]: GET /api/v1/settings [32m304[0m 5.746ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:17 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 30.681ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:17 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 49.990ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:51 [HTTP]: GET /api/v1/categories [32m200[0m 39.788ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:51 [HTTP]: GET /api/v1/expenses?page=1&limit=10&sort=-createdAt [32m200[0m 42.793ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:51 [HTTP]: GET /api/v1/categories [32m304[0m 18.681ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:51 [HTTP]: GET /api/v1/expenses?page=1&limit=10&sort=-createdAt [32m304[0m 17.015ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:51 [HTTP]: GET /api/v1/categories [32m304[0m 11.216ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:54 [HTTP]: GET /api/v1/users [32m200[0m 15.471ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:09:55 [HTTP]: GET /api/v1/users [32m304[0m 5.605ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:02 [HTTP]: GET /api/v1/categories?isActive=true [32m200[0m 18.031ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:02 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 9.254ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:02 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m200[0m 43.336ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:03 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eae [32m200[0m 30.410ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:03 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eab [32m200[0m 34.558ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:03 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 9.521ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:03 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0ea8 [32m200[0m 50.418ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 9.814ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 28.796ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 67.792ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 69.308ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0ea8 [32m304[0m 103.761ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eab [32m304[0m 53.882ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:10 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eae [32m304[0m 66.758ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:17 [HTTP]: GET /api/v1/users [32m304[0m 6.206ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:17 [HTTP]: GET /api/v1/users [32m304[0m 6.926ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 9.920ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 9.101ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 8.909ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 7.982ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eae [32m304[0m 21.917ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0ea8 [32m304[0m 28.934ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:19 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eab [32m304[0m 29.994ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:21 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 20.788ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:21 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 35.662ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:22 [HTTP]: GET /api/v1/categories [32m304[0m 11.744ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:22 [HTTP]: GET /api/v1/expenses?page=1&limit=10&sort=-createdAt [32m304[0m 20.700ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:22 [HTTP]: GET /api/v1/categories [32m304[0m 9.959ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:22 [HTTP]: GET /api/v1/expenses?page=1&limit=10&sort=-createdAt [32m304[0m 15.314ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:22 [HTTP]: GET /api/v1/categories [32m304[0m 10.816ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/users [32m304[0m 8.571ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/users [32m304[0m 6.696ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 13.534ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 17.834ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/categories?isActive=true [32m304[0m 15.500ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/categories?page=1&limit=10&sort=name&includeExpenseCounts=true [32m304[0m 10.972ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0ea8 [32m304[0m 35.094ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eae [32m304[0m 38.281ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:30 [HTTP]: GET /api/v1/expenses?categoryId=6894e3b53f8d0d258cef0eab [32m304[0m 44.432ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:32 [HTTP]: GET /api/v1/categories [32m304[0m 11.982ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:32 [HTTP]: GET /api/v1/budgets?limit=5 [32m200[0m 11.271ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:32 [HTTP]: GET /api/v1/categories [32m304[0m 26.755ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:10:32 [HTTP]: GET /api/v1/budgets?limit=5 [32m304[0m 22.979ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/settings [32m304[0m 43.309ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/settings [32m304[0m 3.100ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/categories [32m304[0m 60.479ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/budgets?limit=5 [32m304[0m 87.953ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/categories [32m304[0m 4.659ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 14:31:14 [HTTP]: GET /api/v1/budgets?limit=5 [32m304[0m 9.655ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:07:38 [DEBUG]: Logging initialized at debug level {
+  "service": "expense-tracker"
+}
+2025-09-11 15:07:39 [INFO]: Server running in development mode on port 5000 {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:03 [HTTP]: GET /api/v1/settings [32m304[0m 198.318ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:03 [HTTP]: GET /api/v1/settings [32m304[0m 3.635ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:04 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 280.413ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:04 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 21.536ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:06 [HTTP]: GET /api/v1/auth/logout [32m304[0m 10.607ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:06 [HTTP]: GET /api/v1/settings [33m401[0m 5.740ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:06 [HTTP]: GET /api/v1/settings [33m401[0m 0.269ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:17 [HTTP]: POST /api/v1/auth/login [32m200[0m 120.067ms {"email":"sam@gmail.com","password":"[REDACTED]"} {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:17 [HTTP]: GET /api/v1/settings [32m304[0m 27.254ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:17 [HTTP]: GET /api/v1/settings [32m304[0m 15.155ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:17 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 44.948ms - {
+  "service": "expense-tracker"
+}
+2025-09-11 15:08:17 [HTTP]: GET /api/v1/analytics/dashboard [32m304[0m 26.179ms - {
+  "service": "expense-tracker"
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Maps API Test</title>
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        font-family: Arial, sans-serif;
+      }
+      .status {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+      .controls {
+        margin-top: 16px;
+        display: flex;
+        gap: 8px;
+      }
+      button {
+        padding: 8px 16px;
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #3367d6;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Google Maps API Test</h1>
+    <div class="status" id="status">Loading...</div>
+    <div id="map"></div>
+    <div class="controls">
+      <button id="reloadBtn">Reload Map</button>
+      <button id="checkMapContainer">Check Map Container</button>
+    </div>
+
+    <script>
+      let map;
+      let directionsService;
+      let directionsRenderer;
+      let mapReady = false;
+
+      // Status display helper
+      function updateStatus(message, isError = false) {
+        const statusEl = document.getElementById("status");
+        statusEl.textContent = message;
+        statusEl.style.backgroundColor = isError ? "#ffebee" : "#e8f5e9";
+        statusEl.style.color = isError ? "#c62828" : "#2e7d32";
+      }
+
+      // Check if the map container is ready
+      function checkMapContainer() {
+        const mapContainer = document.getElementById("map");
+        if (!mapContainer) {
+          updateStatus("Map container not found!", true);
+          return false;
+        }
+
+        updateStatus("Map container found and ready");
+        return true;
+      }
+
+      // Initialize map with retry logic
+      async function initMap() {
+        try {
+          updateStatus("Loading Google Maps libraries...");
+
+          // Make sure the map container exists
+          if (!checkMapContainer()) {
+            updateStatus("Cannot initialize map: container not found", true);
+            return;
+          }
+
+          // Load required libraries using the new Dynamic Import approach
+          const { Map } = await google.maps.importLibrary("maps");
+          const routesLibrary = await google.maps.importLibrary("routes");
+          const { AdvancedMarkerElement } = await google.maps.importLibrary(
+            "marker"
+          );
+          const geometryLibrary = await google.maps.importLibrary("geometry");
+
+          // Log successful library loading
+          console.log("Loaded libraries:", {
+            maps: !!Map,
+            routes: !!routesLibrary,
+            marker: !!AdvancedMarkerElement,
+            geometry: !!geometryLibrary,
+          });
+
+          updateStatus("Libraries loaded successfully! Creating map...");
+
+          // Double-check that the container still exists
+          const mapDiv = document.getElementById("map");
+          if (!mapDiv) {
+            throw new Error("Map container disappeared before map creation");
+          }
+
+          console.log("Map container element:", mapDiv);
+
+          // Initialize the map
+          const center = { lat: 47.3769, lng: 8.5417 }; // Zurich
+          map = new Map(mapDiv, {
+            zoom: 12,
+            center: center,
+            mapId: "DEMO_MAP_ID",
+          });
+
+          mapReady = true;
+          console.log("Map instance created:", map);
+
+          // Create a marker at the center
+          const marker = new AdvancedMarkerElement({
+            map: map,
+            position: center,
+            title: "Zurich",
+          });
+
+          // Initialize directions service
+          directionsService = new google.maps.DirectionsService();
+          directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map,
+            suppressMarkers: false,
+          });
+
+          updateStatus("Map created successfully! Google Maps API is working.");
+        } catch (error) {
+          console.error("Error initializing map:", error);
+          updateStatus(`Error: ${error.message}`, true);
+        }
+      }
+
+      // Add event listeners to buttons
+      document.getElementById("reloadBtn").addEventListener("click", () => {
+        updateStatus("Reloading map...");
+        if (mapReady && map) {
+          // Clean up existing map
+          map = null;
+        }
+        setTimeout(initMap, 100); // Small delay to ensure DOM is ready
+      });
+
+      document
+        .getElementById("checkMapContainer")
+        .addEventListener("click", () => {
+          checkMapContainer();
+        });
+    </script>
+
+    <!-- Load Google Maps with the new dynamic import approach -->
+    <script>
+      ((g) => {
+        var h,
+          a,
+          k,
+          p = "The Google Maps JavaScript API",
+          c = "google",
+          l = "importLibrary",
+          q = "__ib__",
+          m = document,
+          b = window;
+        b = b[c] || (b[c] = {});
+        var d = b.maps || (b.maps = {}),
+          r = new Set(),
+          e = new URLSearchParams(),
+          u = () =>
+            h ||
+            (h = new Promise(async (f, n) => {
+              await (a = m.createElement("script"));
+              e.set("libraries", [...r] + "");
+              for (k in g)
+                e.set(
+                  k.replace(/[A-Z]/g, (t) => "_" + t[0].toLowerCase()),
+                  g[k]
+                );
+              e.set("callback", c + ".maps." + q);
+              a.src = `https://maps.${c}apis.com/maps/api/js?` + e;
+              d[q] = f;
+              a.onerror = () => (h = n(Error(p + " could not load.")));
+              a.nonce = m.querySelector("script[nonce]")?.nonce || "";
+              m.head.append(a);
+            }));
+        d[l]
+          ? console.warn(p + " only loads once. Ignoring:", g)
+          : (d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)));
+      })({
+        key: "AIzaSyDlrivpcgCn6qJUXHd4iefL4ePLZgmZMyc",
+        v: "weekly",
+      });
+
+      // Initialize map when the page loads
+      window.addEventListener("DOMContentLoaded", function () {
+        // Make sure the DOM is fully loaded before initializing the map
+        setTimeout(initMap, 100);
+      });
+    </script>
+  </body>
+</html>

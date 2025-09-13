@@ -1,0 +1,106 @@
+/**
+ * Mock data for testing the admin dashboard before the backend is ready
+ */
+
+export const mockAdminDashboardData = {
+  data: {
+    yearlyMetrics: {
+      totalTrips: 342,
+      totalDistance: 28795,
+      totalCost: 8638.5,
+      avgCostPerTrip: 25.26,
+      avgDistancePerTrip: 84.2,
+    },
+    monthlyMetrics: {
+      totalTrips: 43,
+      totalDistance: 3845,
+      totalCost: 1153.5,
+      avgCostPerTrip: 26.83,
+      avgDistancePerTrip: 89.42,
+    },
+    quarterlyMetrics: {
+      totalTrips: 127,
+      totalDistance: 10512,
+      totalCost: 3153.6,
+      avgCostPerTrip: 24.83,
+      avgDistancePerTrip: 82.77,
+    },
+    recentExpenses: [
+      {
+        id: "exp001",
+        userName: "John Doe",
+        date: "2023-10-25",
+        startLocation: "Zürich",
+        endLocation: "Bern",
+        distance: 126,
+        totalCost: 37.8,
+      },
+      {
+        id: "exp002",
+        userName: "Sarah Weber",
+        date: "2023-10-24",
+        startLocation: "Geneva",
+        endLocation: "Lausanne",
+        distance: 64,
+        totalCost: 19.2,
+      },
+      {
+        id: "exp003",
+        userName: "Michael Lang",
+        date: "2023-10-24",
+        startLocation: "Basel",
+        endLocation: "Lucerne",
+        distance: 87,
+        totalCost: 26.1,
+      },
+      {
+        id: "exp004",
+        userName: "Emma Mueller",
+        date: "2023-10-23",
+        startLocation: "St. Gallen",
+        endLocation: "Zürich",
+        distance: 85,
+        totalCost: 25.5,
+      },
+      {
+        id: "exp005",
+        userName: "Daniel Fischer",
+        date: "2023-10-22",
+        startLocation: "Bern",
+        endLocation: "Interlaken",
+        distance: 56,
+        totalCost: 16.8,
+      },
+    ],
+    categoryBreakdown: [
+      { categoryId: "cat1", categoryName: "Fuel", totalCost: 4582.4 },
+      { categoryId: "cat2", categoryName: "Tolls", totalCost: 1256.3 },
+      { categoryId: "cat3", categoryName: "Maintenance", totalCost: 1895.2 },
+      { categoryId: "cat4", categoryName: "Parking", totalCost: 586.7 },
+      { categoryId: "cat5", categoryName: "Other", totalCost: 317.9 },
+    ],
+    monthlyExpensesChart: [
+      { month: "Jan", totalCost: 652.3, count: 25 },
+      { month: "Feb", totalCost: 589.5, count: 22 },
+      { month: "Mar", totalCost: 723.8, count: 28 },
+      { month: "Apr", totalCost: 698.4, count: 27 },
+      { month: "May", totalCost: 785.2, count: 32 },
+      { month: "Jun", totalCost: 842.6, count: 35 },
+      { month: "Jul", totalCost: 912.3, count: 39 },
+      { month: "Aug", totalCost: 856.7, count: 36 },
+      { month: "Sep", totalCost: 725.4, count: 29 },
+      { month: "Oct", totalCost: 542.8, count: 21 },
+      { month: "Nov", totalCost: 0, count: 0 },
+      { month: "Dec", totalCost: 0, count: 0 },
+    ],
+    timeInfo: {
+      currentYear: 2023,
+      currentMonth: "October 2023",
+      currentQuarter: "Q4 2023",
+    },
+    settings: {
+      ratePerKm: 0.3,
+      activeUsers: 15,
+    },
+  },
+};

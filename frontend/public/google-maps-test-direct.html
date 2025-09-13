@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Google Maps Direct Loading Test</title>
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        font-family: Arial, sans-serif;
+      }
+      .status {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
+      .controls {
+        margin-top: 16px;
+        display: flex;
+        gap: 8px;
+      }
+      button {
+        padding: 8px 16px;
+        background-color: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #3367d6;
+      }
+      .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Google Maps Direct Loading Test</h1>
+    <p>
+      This page loads Google Maps using the traditional script tag method
+      instead of dynamic imports.
+    </p>
+
+    <div class="status" id="status">Waiting for map to load...</div>
+    <div id="map"></div>
+    <div class="controls">
+      <button id="checkStatus">Check Status</button>
+      <button id="reloadPage">Reload Page</button>
+    </div>
+
+    <script>
+      // Set up a global variable to track load status
+      window.mapStatus = {
+        scriptLoaded: false,
+        mapInitialized: false,
+        error: null,
+      };
+
+      // Update status display
+      function updateStatus(message, isError = false) {
+        const statusEl = document.getElementById("status");
+        statusEl.textContent = message;
+        statusEl.style.backgroundColor = isError ? "#ffebee" : "#e8f5e9";
+        statusEl.style.color = isError ? "#c62828" : "#2e7d32";
+      }
+
+      // Initialize map
+      function initMap() {
+        try {
+          updateStatus("Google Maps script loaded, initializing map...");
+          window.mapStatus.scriptLoaded = true;
+
+          // Check if the map container exists
+          const mapElement = document.getElementById("map");
+          if (!mapElement) {
+            throw new Error("Map container not found");
+          }
+
+          // Initialize the map
+          const map = new google.maps.Map(mapElement, {
+            center: { lat: 47.3769, lng: 8.5417 }, // Zurich
+            zoom: 12,
+          });
+
+          // Add a marker
+          const marker = new google.maps.Marker({
+            position: { lat: 47.3769, lng: 8.5417 },
+            map: map,
+            title: "Zurich",
+          });
+
+          window.mapStatus.mapInitialized = true;
+          updateStatus("Map initialized successfully!");
+
+          // Log success for debugging
+          console.log("Map initialized:", map);
+
+          return map;
+        } catch (error) {
+          window.mapStatus.error = error.message;
+          updateStatus("Error initializing map: " + error.message, true);
+          console.error("Map initialization error:", error);
+        }
+      }
+
+      // Error handler for script loading
+      function handleScriptError() {
+        window.mapStatus.error = "Failed to load Google Maps script";
+        updateStatus(
+          "Failed to load Google Maps script. Check your API key and network connection.",
+          true
+        );
+      }
+
+      // Check loading status
+      document
+        .getElementById("checkStatus")
+        .addEventListener("click", function () {
+          const status = window.mapStatus;
+          let message = "Current status: ";
+
+          if (status.error) {
+            message += "ERROR: " + status.error;
+            updateStatus(message, true);
+          } else if (status.mapInitialized) {
+            message += "Map fully initialized and working!";
+            updateStatus(message);
+          } else if (status.scriptLoaded) {
+            message += "Script loaded but map not initialized";
+            updateStatus(message, true);
+          } else {
+            message += "Script is still loading...";
+            updateStatus(message, false);
+          }
+
+          // Check if google object exists
+          if (window.google) {
+            console.log("Google object exists:", window.google);
+          } else {
+            console.log("Google object does not exist yet.");
+          }
+        });
+
+      // Reload page
+      document
+        .getElementById("reloadPage")
+        .addEventListener("click", function () {
+          window.location.reload();
+        });
+    </script>
+
+    <!-- Load Google Maps directly using script tag -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlrivpcgCn6qJUXHd4iefL4ePLZgmZMyc&callback=initMap"
+      async
+      defer
+      onerror="handleScriptError()"
+    ></script>
+  </body>
+</html>
