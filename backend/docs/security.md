@@ -188,16 +188,50 @@ Regularly test the security headers using:
 2. [SecurityHeaders.com](https://securityheaders.com/)
 3. [OWASP ZAP](https://www.zaproxy.org/) for comprehensive security testing
 
+## Environment Variables Configuration
+
+⚠️ **SECURITY WARNING**: Never commit actual API keys or secrets to version control!
+
+### Example Environment Variables (.env file)
+
+```bash
+# Server Configuration
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/expense-tracker
-JWT_SECRET=73DJSJSJS3Jhkddjsasl
+BASE_URL=http://localhost:5000
+
+# JWT Configuration
+JWT_SECRET=your-super-secure-jwt-secret-here-min-32-chars
 JWT_EXPIRE=30d
 JWT_COOKIE_EXPIRE=30
-GOOGLE_MAPS_API_KEY=AIzaSyBmSjzDusBg-elrYYeZ8ODJ69slrZt-ljw
-DEFAULT_COST_PER_KM=0.70
-BASE_URL=http://localhost:5000
-API_INTERNAL_TOKEN=ExpenseBudgetAPIToken2024
+
+# Google Maps API Configuration
+GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
 
 # Gemini AI API Configuration
+GEMINI_API_KEY=your-gemini-ai-api-key-here
 
-GEMINI_API_KEY=AIzaSyDlrivpcgCn6qJUXHd4iefL4ePLZgmZMyc
+# Internal API Security
+API_INTERNAL_TOKEN=your-secure-internal-api-token-here
+
+# Cost Configuration
+DEFAULT_COST_PER_KM=0.70
+```
+
+### Security Best Practices for Environment Variables
+
+1. **Never commit actual values** - Use placeholder examples only
+2. **Use strong, unique secrets** - Generate cryptographically secure random strings
+3. **Rotate keys regularly** - Change API keys and secrets periodically
+4. **Limit API key permissions** - Use principle of least privilege
+5. **Monitor API usage** - Watch for unusual activity patterns
+
+### Generating Secure Secrets
+
+```bash
+# Generate a secure JWT secret (32+ characters)
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# Generate a secure API token
+node -e "console.log(require('crypto').randomBytes(24).toString('base64'))"
+```

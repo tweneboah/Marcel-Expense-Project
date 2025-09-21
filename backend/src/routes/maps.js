@@ -8,6 +8,7 @@ import {
   getRouteSnapshot,
   storeRouteSnapshot,
 } from "../controllers/maps.js";
+import { mapsLimiter } from "../middleware/rateLimiter.js";
 
 const router = express.Router();
 
@@ -15,12 +16,12 @@ const router = express.Router();
 router.use(protect);
 
 // Places and basic routing
-router.get("/places/autocomplete", getPlaceSuggestions);
-router.get("/places/details/:placeId", getPlaceDetailsHandler);
-router.post("/distance", calculateRoute);
+router.get("/places/autocomplete", mapsLimiter, getPlaceSuggestions);
+router.get("/places/details/:placeId", mapsLimiter, getPlaceDetailsHandler);
+router.post("/distance", mapsLimiter, calculateRoute);
 
 // Advanced routing
-router.post("/route/optimize", calculateOptimizedRoute);
+router.post("/route/optimize", mapsLimiter, calculateOptimizedRoute);
 
 // Route snapshots
 router.get("/route/snapshot/:expenseId", getRouteSnapshot);

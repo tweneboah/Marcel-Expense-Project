@@ -918,3 +918,85 @@ This file is being treated as an ES module because it has a '.js' file extension
   ],
   "service": "expense-tracker"
 }
+2025-09-21 15:37:10 [ERROR]: uncaughtException: dataModificationLimiter is not defined
+ReferenceError: dataModificationLimiter is not defined
+    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/routes/users.js:18:38
+    at ModuleJob.run (node:internal/modules/esm/module_job:222:25)
+    at async ModuleLoader.import (node:internal/modules/esm/loader:323:24)
+    at async loadESM (node:internal/process/esm_loader:28:7)
+    at async handleMainPromise (node:internal/modules/run_main:113:12) {
+  "error": {},
+  "stack": "ReferenceError: dataModificationLimiter is not defined\n    at file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/routes/users.js:18:38\n    at ModuleJob.run (node:internal/modules/esm/module_job:222:25)\n    at async ModuleLoader.import (node:internal/modules/esm/loader:323:24)\n    at async loadESM (node:internal/process/esm_loader:28:7)\n    at async handleMainPromise (node:internal/modules/run_main:113:12)",
+  "exception": true,
+  "date": "Sun Sep 21 2025 15:37:10 GMT+0000 (Greenwich Mean Time)",
+  "process": {
+    "pid": 10674,
+    "uid": 501,
+    "gid": 20,
+    "cwd": "/Users/masynctech/Desktop/NEW PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend",
+    "execPath": "/Users/masynctech/.nvm/versions/node/v20.12.1/bin/node",
+    "version": "v20.12.1",
+    "argv": [
+      "/Users/masynctech/.nvm/versions/node/v20.12.1/bin/node",
+      "/Users/masynctech/Desktop/NEW PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/server"
+    ],
+    "memoryUsage": {
+      "rss": 98140160,
+      "heapTotal": 58327040,
+      "heapUsed": 38584976,
+      "external": 21385738,
+      "arrayBuffers": 18262472
+    }
+  },
+  "os": {
+    "loadavg": [
+      1.22998046875,
+      3.17529296875,
+      4.5400390625
+    ],
+    "uptime": 890
+  },
+  "trace": [
+    {
+      "column": 38,
+      "file": "file:///Users/masynctech/Desktop/NEW%20PROJECTS/Marcel-Expenses-Project/Marcel-Expense-Project/backend/src/routes/users.js",
+      "function": null,
+      "line": 18,
+      "method": null,
+      "native": false
+    },
+    {
+      "column": 25,
+      "file": "node:internal/modules/esm/module_job",
+      "function": "ModuleJob.run",
+      "line": 222,
+      "method": "run",
+      "native": false
+    },
+    {
+      "column": 24,
+      "file": "node:internal/modules/esm/loader",
+      "function": "async ModuleLoader.import",
+      "line": 323,
+      "method": "import",
+      "native": false
+    },
+    {
+      "column": 7,
+      "file": "node:internal/process/esm_loader",
+      "function": "async loadESM",
+      "line": 28,
+      "method": null,
+      "native": false
+    },
+    {
+      "column": 12,
+      "file": "node:internal/modules/run_main",
+      "function": "async handleMainPromise",
+      "line": 113,
+      "method": null,
+      "native": false
+    }
+  ],
+  "service": "expense-tracker"
+}

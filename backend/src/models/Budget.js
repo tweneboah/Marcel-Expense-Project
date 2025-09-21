@@ -29,6 +29,11 @@ const BudgetSchema = new mongoose.Schema(
       required: [true, "Please add a budget amount"],
       min: [0, "Budget amount must be positive"],
     },
+    actualExpenses: {
+      type: Number,
+      default: 0,
+      min: [0, "Actual expenses must be positive"],
+    },
     maxDistance: {
       type: Number,
       default: 0,
