@@ -1,0 +1,56 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security audit daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        directory: [frontend, backend]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ${{ matrix.directory }}/package-lock.json
+        
+    - name: Install dependencies
+      run: |
+        cd ${{ matrix.directory }}
+        npm ci
+        
+    - name: Run security audit
+      run: |
+        cd ${{ matrix.directory }}
+        npm audit --audit-level moderate
+        
+    - name: Check for high/critical vulnerabilities
+      run: |
+        cd ${{ matrix.directory }}
+        npm audit --audit-level high --json > audit-results.json
+        if [ $(cat audit-results.json | jq '.metadata.vulnerabilities.high + .metadata.vulnerabilities.critical') -gt 0 ]; then
+          echo "High or critical vulnerabilities found!"
+          npm audit --audit-level high
+          exit 1
+        fi
+        
+    - name: Upload audit results
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: security-audit-${{ matrix.directory }}
+        path: ${{ matrix.directory }}/audit-results.json
