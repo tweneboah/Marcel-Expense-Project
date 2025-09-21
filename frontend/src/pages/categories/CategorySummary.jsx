@@ -98,9 +98,6 @@ const CategorySummary = () => {
 
   // Force a refresh when the component mounts
   useEffect(() => {
-    console.log(
-      "CategorySummary component mounted - triggering initial data fetch"
-    );
     refreshData();
   }, []);
 
@@ -109,8 +106,6 @@ const CategorySummary = () => {
       try {
         setLoading(true);
         setError(null);
-
-        console.log("⚙️ Fetching category summary for period:", period);
 
         // Use a minimal approach to avoid the ObjectId error
         // First just get basic category data without the problematic parameters
@@ -122,28 +117,19 @@ const CategorySummary = () => {
           // period: period,
         });
 
-        console.log("📊 Basic categories data:", result);
-
         // Get the list of categories
         const categoriesData = result.categories || [];
-        console.log(
-          `🏷️ Found ${categoriesData.length} categories:`,
-          categoriesData.map((cat) => cat.name)
-        );
 
         // For the top categories, fetch expenses separately for each one
-        console.log("💰 Fetching expense data for each category...");
         const topCategories = await enrichCategoriesWithExpenseData(
           categoriesData
         );
-        console.log("🔝 Enriched top categories:", topCategories);
 
         // Calculate total expense amount (sum of all categories that have expenses)
         const totalAmount = topCategories.reduce(
           (sum, cat) => sum + cat.amount,
           0
         );
-        console.log(`💵 Total calculated amount: ${totalAmount} CHF`);
 
         // Create a summary from the actual categories data
         const summary = {
@@ -163,10 +149,9 @@ const CategorySummary = () => {
           topCategories: topCategories,
         };
 
-        console.log("📋 Setting summary data:", summary);
         setSummary(summary);
       } catch (error) {
-        console.error("❌ Error fetching category summary:", error);
+        // Error handled by error context
         setError(
           "Unable to load category data. Please try again later or contact support."
         );
@@ -188,11 +173,7 @@ const CategorySummary = () => {
   }, [period]);
 
   useEffect(() => {
-    // Debug logging whenever summary changes
-    if (summary && summary.topCategories) {
-      console.log("Top categories data:", summary.topCategories);
-      console.log("Total expense amount:", summary.totalAmount);
-    }
+    // Summary data updated
   }, [summary]);
 
   // Fetch expense data for each category and enrich the category objects
@@ -201,10 +182,7 @@ const CategorySummary = () => {
       // Process up to 5 categories to avoid too many API calls
       const topCats = categories.slice(0, 5);
 
-      console.log(
-        "Fetching expense data for categories:",
-        topCats.map((cat) => cat.name)
-      );
+      // Enriching categories with expense data
 
       // Create an array of promises for parallel execution
       const categoryPromises = topCats.map(async (category) => {
@@ -212,9 +190,7 @@ const CategorySummary = () => {
           // Fetch expenses for this category
           const expenses = await getExpensesByCategory(category._id);
 
-          console.log(
-            `Category ${category.name} has ${expenses.length} expenses`
-          );
+          // Category expenses processed
 
           // Calculate total amount and count
           let totalAmount = 0;
@@ -233,9 +209,7 @@ const CategorySummary = () => {
             return false;
           });
 
-          console.log(
-            `After filtering, ${category.name} has ${filteredExpenses.length} expenses`
-          );
+          // Filtered expenses for category
 
           // Try different properties that might contain the amount
           for (const expense of filteredExpenses) {
@@ -262,14 +236,8 @@ const CategorySummary = () => {
               expenseAmount = expense.distance * expense.costPerKm;
             }
 
-            // Log the expense amount and ID for debugging
-            if (expenseAmount > 0) {
-              console.log(
-                `  - Expense ${
-                  expense._id || "unknown"
-                }: ${expenseAmount} CHF (Category: ${category.name})`
-              );
-            } else {
+            // Calculate expense amount
+            if (expenseAmount <= 0) {
               // Attempt to estimate the amount if we have distance data
               if (
                 typeof expense.distance === "number" ||
@@ -278,9 +246,6 @@ const CategorySummary = () => {
                 const distance = expense.distance || expense.distanceInKm || 0;
                 const costRate = 0.7; // Default cost rate in CHF
                 expenseAmount = distance * costRate;
-                console.log(
-                  `  - Estimated expense based on distance ${distance} km: ${expenseAmount} CHF (Category: ${category.name})`
-                );
               }
             }
 
@@ -293,10 +258,7 @@ const CategorySummary = () => {
             expenseCount: filteredExpenses.length,
           };
         } catch (err) {
-          console.error(
-            `Error fetching expenses for category ${category._id}:`,
-            err
-          );
+          // Error handled by error context
           return {
             ...category,
             amount: 0,
@@ -324,7 +286,7 @@ const CategorySummary = () => {
       // Sort by amount (highest first)
       return categoriesWithExpenses.sort((a, b) => b.amount - a.amount);
     } catch (error) {
-      console.error("Error enriching categories with expense data:", error);
+      // Error handled by error context
       // Return empty array instead of mock data
       return [];
     }
@@ -350,7 +312,7 @@ const CategorySummary = () => {
   };
 
   const refreshData = () => {
-    console.log("🔄 Refreshing category summary data...");
+    // Refreshing category summary data
     setPeriod(period); // This will trigger the useEffect
   };
 

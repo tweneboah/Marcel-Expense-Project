@@ -29,7 +29,7 @@ const Settings = () => {
       setSettings(response.data);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching settings:", error);
+      // Error handled by error context
       toast.error("Failed to load settings");
       setLoading(false);
     }
@@ -39,9 +39,7 @@ const Settings = () => {
     // Check if user is admin
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     setIsAdmin(user.role === "admin");
-
     fetchSettings();
-
     // Set up refresh interval to detect changes from other components
     const refreshInterval = setInterval(() => {
       fetchSettings();
@@ -89,7 +87,7 @@ const Settings = () => {
       resetForm();
       fetchSettings();
     } catch (error) {
-      console.error("Error saving setting:", error);
+      // Error handled by error context
       toast.error(error.message || "Failed to save setting");
     }
   };
@@ -117,7 +115,7 @@ const Settings = () => {
         toast.success("Setting deleted successfully");
         fetchSettings();
       } catch (error) {
-        console.error("Error deleting setting:", error);
+        // Error handled by error context
         toast.error("Failed to delete setting");
       }
     }

@@ -18,6 +18,7 @@ import API from "../../api/apiConfig";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { tokenStorage } from "../../utils/secureStorage";
 
 const AllBudgetsReport = () => {
   const [budgets, setBudgets] = useState([]);
@@ -103,9 +104,9 @@ const AllBudgetsReport = () => {
           paramAdded = true;
         }
 
-        console.log("Fetching budgets with params:", queryParams);
+        // Fetching budgets with params
 
-        const token = localStorage.getItem("token");
+        const token = tokenStorage.getToken();
         const response = await fetch(
           `${API.defaults.baseURL}/budgets${queryParams}`,
           {
@@ -121,7 +122,7 @@ const AllBudgetsReport = () => {
 
         const data = await response.json();
 
-        console.log("Budgets data:", data);
+        // Budgets data received
 
         setBudgets(data.data || []);
         setPagination({
@@ -130,7 +131,7 @@ const AllBudgetsReport = () => {
           pages: Math.ceil((data.count || 0) / pagination.limit) || 1,
         });
       } catch (error) {
-        console.error("Error fetching budgets:", error);
+        // Error handled by error context
         setError("Failed to load budgets. Please try again.");
         setBudgets([]);
       } finally {
@@ -227,7 +228,7 @@ const AllBudgetsReport = () => {
       // Add unlimited limit to get all matching records
       exportParams += `${paramAdded ? "&" : "?"}limit=1000`;
 
-      const token = localStorage.getItem("token");
+      const token = tokenStorage.getToken();
       const response = await fetch(
         `${API.defaults.baseURL}/budgets${exportParams}`,
         {
@@ -254,7 +255,7 @@ const AllBudgetsReport = () => {
       downloadCSV(csvContent, "budgets_export.csv");
       toast.success("Budgets exported successfully");
     } catch (error) {
-      console.error("Export error:", error);
+      // Error handled by error context
       toast.error("Failed to export budgets");
     } finally {
       setIsExporting(false);

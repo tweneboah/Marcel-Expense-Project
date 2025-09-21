@@ -84,7 +84,7 @@ const BudgetDashboard = () => {
         setError("Failed to fetch budget data");
       }
     } catch (err) {
-      console.error("Error fetching budget data:", err);
+      // Error handled by error context
       setError(err.response?.data?.message || "Failed to fetch budget data");
     } finally {
       setLoading(false);

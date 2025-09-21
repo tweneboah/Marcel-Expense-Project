@@ -42,7 +42,7 @@ const ExpenseTrends = () => {
         setTrendData(response.data);
       } catch (err) {
         setError("Failed to load expense trends data");
-        console.error(err);
+        // Error handled by error context
       } finally {
         setLoading(false);
       }

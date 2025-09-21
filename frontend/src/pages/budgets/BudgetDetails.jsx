@@ -41,7 +41,7 @@ const BudgetDetails = () => {
           setError("Failed to fetch budget details");
         }
       } catch (err) {
-        console.error("Error fetching budget details:", err);
+        // Error handled by error context
         setError(
           err.response?.data?.message || "Failed to fetch budget details"
         );
@@ -73,7 +73,7 @@ const BudgetDetails = () => {
         throw new Error("Failed to delete budget");
       }
     } catch (err) {
-      console.error("Error deleting budget:", err);
+      // Error handled by error context
       setError(err.response?.data?.message || "Failed to delete budget");
       setShowDeleteModal(false);
     } finally {

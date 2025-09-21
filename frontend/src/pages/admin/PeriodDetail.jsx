@@ -37,7 +37,7 @@ const PeriodDetail = () => {
         }
       } catch (err) {
         setError("Failed to load period detail");
-        console.error(err);
+        // Error handled by error context
       } finally {
         setLoading(false);
       }

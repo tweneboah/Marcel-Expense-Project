@@ -10,7 +10,6 @@ export const getPlaceSuggestions = async (query) => {
     const response = await apiConfig.get("/maps/places/autocomplete", {
       params: { input: query },
     });
-    console.log("API Response:", response.data); // Debug log
     return response.data.data.map((prediction) => ({
       placeId: prediction.placeId,
       description: prediction.description,
@@ -22,7 +21,6 @@ export const getPlaceSuggestions = async (query) => {
         .trim(),
     }));
   } catch (error) {
-    console.error("Error fetching place suggestions:", error);
     throw error;
   }
 };
@@ -35,7 +33,6 @@ export const getPlaceSuggestions = async (query) => {
 export const getPlaceDetails = async (placeId) => {
   try {
     const response = await apiConfig.get(`/maps/places/details/${placeId}`);
-    console.log("Place details response:", response.data); // Debug log
 
     const placeData = response.data.data;
     return {
@@ -45,7 +42,6 @@ export const getPlaceDetails = async (placeId) => {
       location: placeData.location,
     };
   } catch (error) {
-    console.error("Error fetching place details:", error);
     throw error;
   }
 };
@@ -58,30 +54,21 @@ export const getPlaceDetails = async (placeId) => {
  */
 export const calculateDistance = async (origin, destination) => {
   try {
-    console.log("Calculating distance with:", {
-      originPlaceId: origin.placeId,
-      destinationPlaceId: destination.placeId,
-    });
-
     const response = await apiConfig.post("/maps/distance", {
       originPlaceId: origin.placeId,
       destinationPlaceId: destination.placeId,
     });
-
-    console.log("Distance API response:", response.data);
 
     // Handle different response structures
     const result = response.data.data || response.data;
 
     // Ensure we have distance value
     if (!result || typeof result.distanceValue !== "number") {
-      console.error("Invalid distance result:", result);
       throw new Error("Failed to calculate distance");
     }
 
     return result;
   } catch (error) {
-    console.error("Error calculating distance:", error);
     throw error;
   }
 };
@@ -101,16 +88,8 @@ export const calculateRouteWithWaypoints = async (
   options = {}
 ) => {
   try {
-    console.log("Calculating route with waypoints:", {
-      originPlaceId: origin.placeId,
-      destinationPlaceId: destination.placeId,
-      waypoints: waypoints,
-      options: options,
-    });
-
     // Ensure we have valid waypoints array
     if (!waypoints || !Array.isArray(waypoints) || waypoints.length === 0) {
-      console.error("No valid waypoints provided");
       throw new Error("Please provide at least one waypoint");
     }
 
@@ -134,9 +113,6 @@ export const calculateRouteWithWaypoints = async (
       })
       .filter(Boolean); // Remove any null entries
 
-    // Debug log the formatted waypoints
-    console.log("Formatted waypoints for API:", formattedWaypoints);
-
     // Ensure we have at least one valid waypoint after filtering
     if (formattedWaypoints.length === 0) {
       throw new Error("No valid waypoints provided after formatting");
@@ -152,28 +128,18 @@ export const calculateRouteWithWaypoints = async (
         includeAlternatives: options.includeAlternatives === true,
       });
 
-      console.log("Route API response:", response.data);
-
       // Handle different response structures
       const result = response.data.data || response.data;
 
       // Ensure we have distance value
       if (!result || typeof result.distanceValue !== "number") {
-        console.error("Invalid route result:", result);
         throw new Error("Failed to calculate route");
       }
 
       return result;
     } catch (backendError) {
       // If the backend API fails, try with a direct distance calculation
-      console.warn(
-        "Backend route calculation failed, trying fallback:",
-        backendError
-      );
-
       // Fallback: Calculate distance between origin and destination directly
-      console.log("Using fallback: direct distance calculation");
-
       const distanceResult = await calculateDistance(origin, destination);
 
       // Create a simplified result object
@@ -191,7 +157,6 @@ export const calculateRouteWithWaypoints = async (
       };
     }
   } catch (error) {
-    console.error("Error calculating route with waypoints:", error);
     throw error;
   }
 };
@@ -276,7 +241,6 @@ export const getRouteFromSnapshot = (routeSnapshot) => {
       },
     };
   } catch (error) {
-    console.error("Error parsing route snapshot:", error);
     return null;
   }
 };

@@ -7,6 +7,7 @@ import {
   Polyline,
   InfoWindow,
 } from "@react-google-maps/api";
+import { formatDirectionInstruction } from "../../utils/htmlSanitizer";
 
 const containerStyle = {
   width: "100%",
@@ -20,8 +21,8 @@ const defaultCenter = {
   lng: 8.5417,
 };
 
-// Update API key to match the one that works
-const GOOGLE_MAPS_API_KEY = "AIzaSyBmSjzDusBg-elrYYeZ8ODJ69slrZt-ljw";
+// Use environment variable for API key
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 // Define libraries as a static constant to prevent unnecessary reloads
 const libraries = ["places"];
@@ -206,15 +207,14 @@ const GoogleMapComponent = ({
               setError(null);
               processRouteData(result);
 
-              // Log route information
-              console.log("Route information:", result);
+              // Route information processed
 
               // Fit map to the route bounds
               if (map && result.routes[0]?.bounds) {
                 map.fitBounds(result.routes[0].bounds);
               }
             } else {
-              console.error("Error calculating route:", status);
+              // Error handled by error context
               setError(`Could not calculate route: ${status}`);
 
               // Create a bounding box for all points
@@ -226,7 +226,7 @@ const GoogleMapComponent = ({
           }
         );
       } catch (err) {
-        console.error("Error setting up directions:", err);
+        // Error handled by error context
         setLoading(false);
         setError("Failed to set up route calculation. Please try again.");
 
@@ -251,7 +251,7 @@ const GoogleMapComponent = ({
 
         // Check if Google Maps API is loaded
         if (!window.google || !window.google.maps) {
-          console.error("Google Maps API not loaded properly");
+          // Error handled by error context
           setError("Google Maps API not available. Please try again later.");
           return;
         }
@@ -270,7 +270,7 @@ const GoogleMapComponent = ({
           }
         }
       } catch (err) {
-        console.error("Error in map load handler:", err);
+        // Error handled by error context
         setError("Could not initialize map. Please try again.");
       }
     },
@@ -433,12 +433,9 @@ const GoogleMapComponent = ({
                       {stepIndex + 1}
                     </div>
                     <div>
-                      <div
-                        className="font-medium mb-1"
-                        dangerouslySetInnerHTML={{
-                          __html: step.html_instructions,
-                        }}
-                      />
+                      <div className="font-medium mb-1">
+                        {formatDirectionInstruction(step.html_instructions)}
+                      </div>
                       <div className="flex flex-wrap gap-2 text-xs">
                         <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full">
                           {step.distance?.text || ""}
@@ -799,11 +796,9 @@ const GoogleMapComponent = ({
                 onCloseClick={() => setSelectedStep(null)}
               >
                 <div className="p-2 max-w-md">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: selectedStep.step.html_instructions,
-                    }}
-                  />
+                  <div className="font-medium">
+                    {formatDirectionInstruction(selectedStep.step.html_instructions)}
+                  </div>
                   <div className="text-xs text-gray-600 mt-1">
                     {selectedStep.step.distance?.text || ""} -{" "}
                     {selectedStep.step.duration?.text || ""}

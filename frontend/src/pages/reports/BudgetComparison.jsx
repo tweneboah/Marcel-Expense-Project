@@ -71,18 +71,15 @@ const BudgetComparison = () => {
         queryParams += `&month=${monthIndex}`;
         queryParams += "&debug=true";
 
-        console.log(
-          `Making API request: /advanced-reports/budget-comparison?${queryParams}`
-        );
+        // Making API request
 
         const response = await API.get(
           `/advanced-reports/budget-comparison?${queryParams}`
         );
-        console.log("API Response:", response);
 
         // API returns {success: true, data: {...}} structure
         if (response.data && response.data.success && response.data.data) {
-          console.log("Setting comparison data from API response");
+          // Setting comparison data from API response
           const apiData = response.data.data;
 
           // Create chart data structure from API response
@@ -113,11 +110,11 @@ const BudgetComparison = () => {
             rawResponse: response.data,
           });
         } else {
-          console.error("Unexpected API response structure:", response.data);
+          // Unexpected API response structure
           setError("Unexpected API response structure");
         }
       } catch (err) {
-        console.error("Error fetching comparison data:", err);
+        // Error handled by error context
         setError(err.message || "An error occurred while fetching data");
       } finally {
         setIsLoading(false);

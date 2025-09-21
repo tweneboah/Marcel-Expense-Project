@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getExpenses } from "../../api/expenseApi";
 import { getExpenseCategories } from "../../api/expenseApi";
+import { useApiCall } from "../../hooks/useApiCall";
+import { useError } from "../../context/ErrorContext";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 import ExpenseFilters from "../../components/expenses/ExpenseFilters";
@@ -39,8 +41,6 @@ import {
 
 const ExpensesList = () => {
   const [expenses, setExpenses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [categories, setCategories] = useState([]);
@@ -51,85 +51,84 @@ const ExpensesList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const routes = useExpenseRoutes();
 
+  // Use unified error handling for fetching categories
+  const { execute: fetchCategories } = useApiCall({
+    onSuccess: (data) => {
+      setCategories(data.categories || []);
+    }
+  });
+
   // Fetch categories on component mount
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getExpenseCategories();
-        setCategories(data.categories || []);
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
-      }
-    };
+    fetchCategories(() => getExpenseCategories(), {
+      context: { component: 'ExpensesList', action: 'fetchCategories' }
+    });
+  }, [fetchCategories]);
 
-    fetchCategories();
-  }, []);
+  // Use unified error handling for fetching expenses
+  const { execute: fetchExpenses, loading, error } = useApiCall({
+    onSuccess: (data) => {
+      // Handle the response data
+      if (data.data) {
+        setExpenses(data.data);
+      } else {
+        setExpenses(data);
+      }
+
+      // Set pagination data
+      if (data.pagination) {
+        setPagination(data.pagination);
+      }
+
+      // Set total count
+      if (data.count !== undefined) {
+        setTotalItems(data.count);
+      } else if (Array.isArray(data.data)) {
+        setTotalItems(data.data.length);
+      } else if (Array.isArray(data)) {
+        setTotalItems(data.length);
+      }
+    },
+    onError: () => {
+      setExpenses([]);
+      setTotalItems(0);
+      setPagination(null);
+    }
+  });
 
   // Fetch expenses with filters and pagination
   useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        setLoading(true);
+    // Prepare query parameters for the API
+    const queryParams = {};
 
-        // Prepare query parameters for the API
-        const queryParams = {};
+    // Add pagination parameters
+    queryParams.page = currentPage;
+    queryParams.limit = itemsPerPage;
 
-        // Add pagination parameters
-        queryParams.page = currentPage;
-        queryParams.limit = itemsPerPage;
+    // Add date range filters
+    if (filters.startDate) {
+      queryParams.startDate = filters.startDate;
+    }
 
-        // Add date range filters
-        if (filters.startDate) {
-          queryParams.startDate = filters.startDate;
-        }
+    if (filters.endDate) {
+      queryParams.endDate = filters.endDate;
+    }
 
-        if (filters.endDate) {
-          queryParams.endDate = filters.endDate;
-        }
+    // Add status filter
+    if (filters.filterStatus) {
+      queryParams.status = filters.filterStatus;
+    }
 
-        // Add status filter
-        if (filters.filterStatus) {
-          queryParams.status = filters.filterStatus;
-        }
+    // Add category filter
+    if (filters.categoryId) {
+      queryParams.category = filters.categoryId;
+    }
 
-        // Add category filter
-        if (filters.categoryId) {
-          queryParams.category = filters.categoryId;
-        }
-
-        console.log("Fetching expenses with params:", queryParams);
-        const data = await getExpenses(queryParams);
-
-        // Handle the response data
-        if (data.data) {
-          setExpenses(data.data);
-        } else {
-          setExpenses(data);
-        }
-
-        // Set pagination data
-        if (data.pagination) {
-          setPagination(data.pagination);
-        }
-
-        // Set total count
-        if (data.count !== undefined) {
-          setTotalItems(data.count);
-        } else if (Array.isArray(data.data)) {
-          setTotalItems(data.data.length);
-        } else if (Array.isArray(data)) {
-          setTotalItems(data.length);
-        }
-      } catch (err) {
-        console.error("Failed to fetch expenses:", err);
-        setError("Failed to load expenses. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExpenses();
-  }, [filters, currentPage, itemsPerPage]);
+    // Fetching expenses with filters
+    fetchExpenses(() => getExpenses(queryParams), {
+      context: { component: 'ExpensesList', action: 'fetchExpenses' }
+    });
+  }, [filters, currentPage, itemsPerPage, fetchExpenses]);
 
   // Format date to display in a user-friendly format
   const formatDate = (dateString) => {

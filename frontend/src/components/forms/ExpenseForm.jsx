@@ -16,6 +16,8 @@ import {
 import { useExpenseRoutes } from "../../utils/routeHelpers";
 import { useAuth } from "../../context/AuthContext";
 import useSettingsValue from "../../hooks/useSettingsValue";
+import { useApiCall, useFormSubmit } from "../../hooks/useApiCall";
+import { useError } from "../../context/ErrorContext";
 import PlaceAutocomplete from "./PlaceAutocomplete";
 import Button from "../ui/Button";
 import Stepper from "../ui/Stepper";
@@ -131,7 +133,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
   // When initialData changes and we're in edit mode, update the form
   useEffect(() => {
     if (isEdit && initialData && Object.keys(initialData).length > 0) {
-      console.log("Initializing form with edit data:", initialData);
 
       // Handle notes that might be stored as JSON string
       let notesValue = initialData.notes || "";
@@ -147,7 +148,7 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
             setEnhancedNotes(enhancedValue);
           }
         } catch (err) {
-          console.error("Failed to parse notes JSON:", err);
+          // Failed to parse notes JSON - continue with original value
         }
       }
 
@@ -193,50 +194,38 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
     }
   }, [isEdit, initialData]);
 
+  // Use unified error handling for fetching categories
+  const { execute: fetchCategories, loading: fetchCategoriesLoading, error: fetchCategoriesError } = useApiCall({
+    onSuccess: (result) => {
+      // Extract categories array from result
+      const categoriesData = result.categories || [];
+
+      if (Array.isArray(categoriesData)) {
+        setCategories(categoriesData);
+
+        // Set default category if available and not already set
+        if (categoriesData.length > 0 && !formData.categoryId) {
+          const defaultCategory =
+            categoriesData.find(
+              (cat) => cat.name.toLowerCase() === "travel"
+            ) || categoriesData[0];
+          setFormData((prev) => ({
+            ...prev,
+            categoryId: defaultCategory._id,
+          }));
+        }
+      } else {
+        setCategories([]);
+      }
+    }
+  });
+
   // Fetch expense categories on mount
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setCategoriesLoading(true);
-        setCategoriesError(null);
-        const result = await getExpenseCategories({
-          isActive: true, // Only get active categories
-        });
-
-        // Extract categories array from result
-        const categoriesData = result.categories || [];
-
-        if (Array.isArray(categoriesData)) {
-          setCategories(categoriesData);
-          console.log("Categories loaded successfully:", categoriesData);
-
-          // Set default category if available and not already set
-          if (categoriesData.length > 0 && !formData.categoryId) {
-            const defaultCategory =
-              categoriesData.find(
-                (cat) => cat.name.toLowerCase() === "travel"
-              ) || categoriesData[0];
-            setFormData((prev) => ({
-              ...prev,
-              categoryId: defaultCategory._id,
-            }));
-          }
-        } else {
-          console.error("Categories data is not an array:", result);
-          setCategoriesError("Invalid categories data received");
-          setCategories([]);
-        }
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
-        setCategoriesError("Failed to load expense categories");
-        setCategories([]);
-      } finally {
-        setCategoriesLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+    fetchCategories(() => getExpenseCategories({ isActive: true }), {
+      context: { component: 'ExpenseForm', action: 'fetchCategories' }
+    });
+  }, [fetchCategories]);
 
   // Development helper function to reload categories
   const reloadCategories = async () => {
@@ -244,23 +233,18 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
       setCategoriesLoading(true);
       setCategoriesError(null);
 
-      console.log("Manually reloading categories...");
       const result = await getExpenseCategories({ isActive: true });
-      console.log("Manual reload result:", result);
 
       // Extract categories array from result
       const categoriesData = result.categories || [];
 
       if (Array.isArray(categoriesData)) {
-        console.log("Categories reloaded successfully:", categoriesData);
         setCategories(categoriesData);
       } else {
-        console.error("Invalid data structure on reload:", result);
         setCategoriesError("Invalid categories data structure");
         setCategories([]);
       }
     } catch (err) {
-      console.error("Failed to reload categories:", err);
       setCategoriesError(`Failed to load: ${err.message}`);
     } finally {
       setCategoriesLoading(false);
@@ -338,7 +322,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
 
   // Update function to handle origin place selection
   const handleOriginSelected = async (place) => {
-    console.log("Origin place selected:", place);
     setFormData({
       ...formData,
       startLocation: place.description || place.formattedAddress,
@@ -349,7 +332,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
       const placeDetails = await getPlaceDetails(place.placeId);
       setOriginPlace(formatPlaceForMap(placeDetails));
     } catch (err) {
-      console.error("Error fetching origin place details:", err);
       setFormErrors({
         ...formErrors,
         startLocation: "Failed to get place details",
@@ -359,7 +341,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
 
   // Update function to handle destination place selection
   const handleDestinationSelected = async (place) => {
-    console.log("Destination place selected:", place);
     setFormData({
       ...formData,
       endLocation: place.description || place.formattedAddress,
@@ -370,7 +351,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
       const placeDetails = await getPlaceDetails(place.placeId);
       setDestinationPlace(formatPlaceForMap(placeDetails));
     } catch (err) {
-      console.error("Error fetching destination place details:", err);
       setFormErrors({
         ...formErrors,
         endLocation: "Failed to get place details",
@@ -380,7 +360,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
 
   // Update function to handle waypoint place selection
   const handleWaypointSelected = async (place, index) => {
-    console.log(`Waypoint ${index} selected:`, place);
     const updatedWaypoints = [...waypoints];
     updatedWaypoints[index] = {
       ...updatedWaypoints[index],
@@ -397,7 +376,7 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
       updatedWaypointPlaces[index] = formattedPlace;
       setWaypointPlaces(updatedWaypointPlaces);
     } catch (err) {
-      console.error(`Error fetching waypoint ${index} place details:`, err);
+      // Error handling without console logging
     }
   };
 
@@ -423,12 +402,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
   // Calculate route distance
   const calculateRouteDistance = async () => {
     try {
-      console.log("Calculating distance with place IDs:", {
-        startPlaceId: formData.startPlaceId,
-        endPlaceId: formData.endPlaceId,
-        waypoints: waypoints,
-      });
-
       if (!formData.startPlaceId || !formData.endPlaceId) {
         setFormErrors((prev) => ({
           ...prev,
@@ -444,7 +417,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
 
       // Filter out any waypoints without placeId
       const validWaypoints = waypoints.filter((wp) => wp && wp.placeId);
-      console.log("Valid waypoints for calculation:", validWaypoints);
 
       // If we have waypoints, use the route with waypoints calculation
       if (validWaypoints.length > 0) {
@@ -461,8 +433,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
           { placeId: formData.endPlaceId }
         );
       }
-
-      console.log("Distance calculation result:", result);
 
       if (!result || typeof result.distanceValue !== "number") {
         throw new Error("Invalid distance calculation result");
@@ -530,7 +500,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
 
       setCurrentStep(6); // Move to expense details step
     } catch (err) {
-      console.error("Error calculating distance:", err);
       setFormErrors((prev) => ({
         ...prev,
         startLocation: "Failed to calculate distance. Please try again.",
@@ -568,7 +537,6 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
         setEnhancedNotes(formData.notes);
       }
     } catch (err) {
-      console.error("Failed to get enhanced notes:", err);
       setError("Failed to enhance notes. Using original text.");
       setEnhancedNotes(formData.notes);
     } finally {
@@ -701,26 +669,18 @@ const ExpenseForm = ({ initialData = {}, isEdit = false }) => {
         expenseData.status = formData.status;
       }
 
-      console.log(
-        `${isEdit ? "Updating" : "Creating"} expense data:`,
-        expenseData
-      );
-
       let result;
       if (isEdit && initialData._id) {
         // Update existing expense
         result = await updateExpense(initialData._id, expenseData);
-        console.log("Expense updated successfully:", result);
       } else {
         // Create new expense
         result = await createExpense(expenseData);
-        console.log("Expense created successfully:", result);
       }
 
       // Redirect to expense details page after successful operation
       navigate(routes.detail(result.data._id));
     } catch (err) {
-      console.error(`Failed to ${isEdit ? "update" : "create"} expense:`, err);
       setError(
         err.response?.data?.message ||
           err.message ||

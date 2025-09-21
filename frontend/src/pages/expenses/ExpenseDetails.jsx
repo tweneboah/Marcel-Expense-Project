@@ -7,6 +7,7 @@ import { Alert } from "../../components/ui/Alert";
 import { formatDistance } from "../../utils/googleMaps";
 import { useExpenseRoutes } from "../../utils/routeHelpers";
 import { useAuth } from "../../context/AuthContext";
+import { formatDirectionInstruction } from "../../utils/htmlSanitizer";
 import { motion } from "framer-motion";
 import GoogleMapComponent from "../../components/ui/GoogleMapComponent";
 import {
@@ -88,10 +89,9 @@ const ExpenseDetails = () => {
         const response = await getExpenseById(id);
         // Extract data from the response
         const expenseData = response.data || response;
-        console.log("Expense data:", expenseData);
         setExpense(expenseData);
       } catch (err) {
-        console.error("Failed to fetch expense details:", err);
+        // Error handled by error context
         setError("Failed to load expense details. Please try again later.");
       } finally {
         setLoading(false);
@@ -138,7 +138,7 @@ const ExpenseDetails = () => {
       await deleteExpense(id);
       navigate(routes.listUrl);
     } catch (err) {
-      console.error("Error deleting expense:", err);
+      // Error handled by error context
       setDeleteError("Failed to delete expense. Please try again.");
       setShowDeleteConfirm(false);
     }
@@ -500,19 +500,21 @@ const ExpenseDetails = () => {
               <p className="text-gray-700">
                 {(() => {
                   if (!notes) return "No notes provided.";
-                  
+
                   // Check if notes is a JSON string with original/enhanced structure
-                  if (typeof notes === 'string' && notes.startsWith('{')) {
+                  if (typeof notes === "string" && notes.startsWith("{")) {
                     try {
                       const parsedNotes = JSON.parse(notes);
                       // Return enhanced notes if available, otherwise original
-                      return parsedNotes.enhanced || parsedNotes.original || notes;
+                      return (
+                        parsedNotes.enhanced || parsedNotes.original || notes
+                      );
                     } catch (e) {
                       // If parsing fails, return the original string
                       return notes;
                     }
                   }
-                  
+
                   // If it's already plain text, return as is
                   return notes;
                 })()}
@@ -690,12 +692,9 @@ const ExpenseDetails = () => {
                                     </div>
                                   </div>
                                   <div className="flex-grow">
-                                    <div
-                                      className="font-medium text-gray-700 mb-1"
-                                      dangerouslySetInnerHTML={{
-                                        __html: step.html_instructions,
-                                      }}
-                                    />
+                                    <div className="font-medium text-gray-700 mb-1">
+                                      {formatDirectionInstruction(step.html_instructions)}
+                                    </div>
                                     <div className="flex flex-wrap gap-2">
                                       {step.distance && (
                                         <span className="px-2 py-0.5 bg-[#7678ed]/10 text-[#7678ed] rounded-full text-xs">

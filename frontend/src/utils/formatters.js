@@ -61,7 +61,6 @@ export const formatDate = (dateValue, format = "default") => {
 
     // Check if date is valid
     if (isNaN(date.getTime())) {
-      console.warn("Invalid date format:", dateValue);
       return "N/A";
     }
 
@@ -77,7 +76,6 @@ export const formatDate = (dateValue, format = "default") => {
       options[format] || options.default
     );
   } catch (error) {
-    console.error("Date formatting error:", error, "for value:", dateValue);
     return "N/A";
   }
 };

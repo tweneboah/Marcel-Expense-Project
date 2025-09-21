@@ -58,10 +58,7 @@ const Profile = () => {
 
     try {
       // This would be an API call in a real app
-      console.log("Updating profile:", {
-        name: user?.name,
-        email: user?.email,
-      });
+      // Updating profile data
 
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -99,7 +96,7 @@ const Profile = () => {
 
     try {
       // This would be an API call in a real app
-      console.log("Changing password");
+      // Changing password
 
       // Simulate API delay
       await new Promise((resolve) => setTimeout(resolve, 1000));

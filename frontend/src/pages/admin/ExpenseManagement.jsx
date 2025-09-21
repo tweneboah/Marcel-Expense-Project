@@ -62,7 +62,7 @@ const ExpenseManagement = () => {
         const data = await getExpenseCategories();
         setCategories(data.categories || []);
       } catch (err) {
-        console.error("Failed to fetch categories:", err);
+        // Error handled by error context
       }
     };
 
@@ -101,7 +101,7 @@ const ExpenseManagement = () => {
           queryParams.category = filters.categoryId;
         }
 
-        console.log("Fetching expenses with params:", queryParams);
+        // Fetching expenses with filters
         const data = await getExpenses(queryParams);
 
         // Handle the response data
@@ -125,9 +125,9 @@ const ExpenseManagement = () => {
           setTotalItems(data.length);
         }
       } catch (err) {
-        console.error("Failed to fetch expenses:", err);
-        setError("Failed to load expenses. Please try again later.");
-      } finally {
+          // Error handled by error context
+          setError("Failed to load expenses. Please try again later.");
+        } finally {
         setLoading(false);
       }
     };
@@ -270,7 +270,7 @@ const ExpenseManagement = () => {
         setNotification(null);
       }, 5000);
     } catch (error) {
-      console.error("Failed to export expenses:", error);
+      // Error handled by error context
 
       // Show error notification
       setNotification({
@@ -411,7 +411,7 @@ const ExpenseManagement = () => {
         setNotification(null);
       }, 5000);
     } catch (error) {
-      console.error("Failed to delete expense:", error);
+      // Error handled by error context
       setDeleteError("Failed to delete expense. Please try again.");
     } finally {
       setLoading(false);

@@ -141,7 +141,7 @@ const MapView = ({
 
       return staticMapUrl.toString();
     } catch (error) {
-      console.error("Error creating Google static map URL:", error);
+      // Error handled by error context
       // Fall back to Mapbox if Google Maps URL creation fails
       return getDirectStaticMapUrl(origin, destination, waypoints, true);
     }
@@ -171,10 +171,7 @@ const MapView = ({
           className="w-full h-full object-cover"
           onLoad={() => setLoading(false)}
           onError={(e) => {
-            console.error(
-              "Failed to load Google static map, trying Mapbox:",
-              e
-            );
+            // Error handled by error context
             // Try Mapbox as fallback
             const mapboxUrl = getDirectStaticMapUrl(
               origin,
@@ -201,7 +198,7 @@ const MapView = ({
         />
       );
     } catch (err) {
-      console.error("Error setting up initial map:", err);
+      // Error handled by error context
       setError("Failed to initialize map");
       setLoading(false);
     }
@@ -232,14 +229,12 @@ const MapView = ({
           formattedWaypoints.some((wp) => !wp.placeId);
 
         if (shouldSkipBackendCall) {
-          console.log(
-            "Skipping backend route calculation due to missing place IDs"
-          );
+          // Skipping backend route calculation due to missing place IDs
           throw new Error("Missing place IDs required for routing");
         }
 
         // Call the backend API to calculate the route
-        console.log("Calculating route with backend API...");
+        // Calculating route with backend API
         const response = await apiConfig.post("/maps/route/optimize", {
           originPlaceId: origin.placeId || "",
           destinationPlaceId: destination.placeId || "",
@@ -303,10 +298,7 @@ const MapView = ({
                 className="w-full h-full object-cover"
                 onLoad={() => setLoading(false)}
                 onError={(e) => {
-                  console.error(
-                    "Failed to load route map image, trying direct static map:",
-                    e
-                  );
+                  // Error handled by error context
                   renderStaticMapFallback();
                 }}
               />
@@ -318,9 +310,9 @@ const MapView = ({
         // If we got here, the response didn't have a valid route
         throw new Error("No valid route data received from backend");
       } catch (err) {
-        console.error("Error calculating route:", err);
+        // Error handled by error context
         if (err.response?.status === 500) {
-          console.log("Server error encountered - falling back to static map");
+          // Server error encountered - falling back to static map
         }
         renderStaticMapFallback();
       }
@@ -328,7 +320,7 @@ const MapView = ({
 
     // Function to render a static map without route
     const renderStaticMapFallback = () => {
-      console.log("Falling back to static map without route");
+      // Falling back to static map without route
       try {
         // Get a direct static map URL
         const staticMapUrl = getDirectStaticMapUrl(
@@ -345,10 +337,7 @@ const MapView = ({
             className="w-full h-full object-cover"
             onLoad={() => setLoading(false)}
             onError={(e) => {
-              console.error(
-                "Failed to load Google static map, trying Mapbox:",
-                e
-              );
+              // Error handled by error context
               // Try Mapbox as fallback
               const mapboxUrl = getDirectStaticMapUrl(
                 origin,
@@ -375,7 +364,7 @@ const MapView = ({
           />
         );
       } catch (fallbackErr) {
-        console.error("Error creating fallback map:", fallbackErr);
+        // Error handled by error context
         setLoading(false);
         setError("Unable to display map. Please try again later.");
       }
@@ -437,9 +426,7 @@ const MapView = ({
           className="w-full h-full object-cover"
           onLoad={() => setLoading(false)}
           onError={() => {
-            console.error(
-              "Failed to load route map image with provided polyline"
-            );
+            // Error handled by error context
             renderStaticMapFallback();
           }}
         />

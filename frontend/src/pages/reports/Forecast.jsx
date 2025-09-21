@@ -63,14 +63,14 @@ const Forecast = () => {
         );
 
         if (response.data && response.data.data) {
-          console.log("Forecast API Response:", response.data.data);
+          // Forecast API response received
           setForecastData(response.data.data);
         } else {
-          console.error("Empty or invalid response from server:", response);
+          // Empty or invalid response from server
           setError("No data returned from the server");
         }
       } catch (err) {
-        console.error("Error fetching forecast data:", err);
+        // Error handled by error context
         setError(
           `Failed to load forecast data: ${err.message || "Unknown error"}`
         );

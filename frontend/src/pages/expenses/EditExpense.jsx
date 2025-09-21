@@ -22,7 +22,7 @@ const EditExpense = () => {
         const data = await getExpenseById(id);
         setExpense(data);
       } catch (err) {
-        console.error("Failed to fetch expense:", err);
+        // Error handled by error context
         setError("Failed to load expense data. Please try again.");
       } finally {
         setLoading(false);

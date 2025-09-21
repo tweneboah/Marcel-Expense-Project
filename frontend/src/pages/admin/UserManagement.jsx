@@ -83,7 +83,7 @@ const UserManagement = () => {
     } catch (err) {
       setError("Failed to load users. Please try again.");
       toast.error("Failed to load users");
-      console.error("Error fetching users:", err);
+      // Error handled by error context
     } finally {
       setLoading(false);
     }
@@ -118,7 +118,7 @@ const UserManagement = () => {
       );
     } catch (err) {
       toast.error("Failed to update user status");
-      console.error("Error updating user status:", err);
+      // Error handled by error context
     }
   };
 
@@ -165,7 +165,7 @@ const UserManagement = () => {
       toast.success("User added successfully");
     } catch (err) {
       toast.error(err.message || "Failed to add user");
-      console.error("Error adding user:", err);
+      // Error handled by error context
     }
   };
 
@@ -190,7 +190,7 @@ const UserManagement = () => {
       toast.success("User updated successfully");
     } catch (err) {
       toast.error(err.message || "Failed to update user");
-      console.error("Error updating user:", err);
+      // Error handled by error context
     }
   };
 
@@ -206,7 +206,7 @@ const UserManagement = () => {
       toast.success("User deleted successfully");
     } catch (err) {
       toast.error(err.message || "Failed to delete user");
-      console.error("Error deleting user:", err);
+      // Error handled by error context
     }
   };
 

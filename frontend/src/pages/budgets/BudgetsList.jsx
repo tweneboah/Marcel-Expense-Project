@@ -64,7 +64,7 @@ const BudgetsList = () => {
           setError("No budget data received from server");
         }
       } catch (err) {
-        console.error("Error fetching budgets:", err);
+        // Error handled by error context
         setError(err.response?.data?.message || "Failed to fetch budgets");
         setBudgets([]);
       } finally {
@@ -111,7 +111,7 @@ const BudgetsList = () => {
         throw new Error("Failed to delete budget");
       }
     } catch (err) {
-      console.error("Error deleting budget:", err);
+      // Error handled by error context
       setError(err.response?.data?.message || "Failed to delete budget");
     } finally {
       setDeleting(false);

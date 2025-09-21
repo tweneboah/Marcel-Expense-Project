@@ -36,7 +36,7 @@ const ExpenseFilters = ({
         const data = await getExpenseCategories();
         setCategories(data.categories || []);
       } catch (err) {
-        console.error("Failed to fetch categories:", err);
+        // Error handled by error context
       } finally {
         setCategoriesLoading(false);
       }

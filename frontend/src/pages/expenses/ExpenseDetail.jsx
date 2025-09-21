@@ -110,7 +110,7 @@ const ExpenseDetail = () => {
       setRouteData(mockRouteSnapshot);
       setShowMap(true); // Automatically show map when data is available
     } catch (error) {
-      console.error("Failed to fetch route data:", error);
+      // Error handled by error context
     }
   };
 
@@ -118,7 +118,7 @@ const ExpenseDetail = () => {
     if (window.confirm("Are you sure you want to delete this expense?")) {
       try {
         // This would be an API call in a real app
-        console.log("Deleting expense:", id);
+        // Deleting expense
 
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 500));

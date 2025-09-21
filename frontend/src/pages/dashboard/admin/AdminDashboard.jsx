@@ -36,18 +36,9 @@ const AdminDashboard = () => {
         setDashboardData(response.data);
 
         // Debug logging for received data
-        if (response.data?.recentExpenses) {
-          console.log(
-            "Recent expenses date formats:",
-            response.data.recentExpenses.map((exp) => ({
-              originalDate: exp.journeyDate,
-              parsedDate: new Date(exp.journeyDate),
-              isValid: !isNaN(new Date(exp.journeyDate).getTime()),
-            }))
-          );
-        }
+        // Recent expenses date formats processed
       } catch (err) {
-        console.error("Failed to fetch dashboard data:", err);
+        // Error handled by error context
         setError("Failed to load dashboard data. Please try again later.");
       } finally {
         setLoading(false);

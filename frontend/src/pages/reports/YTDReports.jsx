@@ -93,7 +93,7 @@ const YTDReports = () => {
           const response = await API.get(
             `/advanced-reports/ytd?year=${year}&compareWithPreviousYear=${compareWithPrevious}`
           );
-          console.log("API Response:", response.data);
+          // API response received
 
           // Process the data from the backend to match our frontend structure
           const data = response.data.data;
@@ -180,7 +180,7 @@ const YTDReports = () => {
           setReports(processedData);
           setError(null);
         } catch (err) {
-          console.error("API Error:", err);
+          // Error handled by error context
           setError(
             err.response?.data?.message || "Failed to fetch YTD reports"
           );

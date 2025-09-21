@@ -7,12 +7,7 @@ import { mockAdminDashboardData } from "./mockData";
  * @returns {Promise<Object>} - Dashboard data including metrics and charts
  */
 export const getAdminDashboardData = async () => {
-  try {
-    // Use the real API endpoint (without duplicate /api/v1 prefix)
-    const response = await apiConfig.get("/analytics/dashboard");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching admin dashboard data:", error);
-    throw error;
-  }
+  // Use the real API endpoint (without duplicate /api/v1 prefix)
+  const response = await apiConfig.get("/analytics/dashboard");
+  return response.data;
 };

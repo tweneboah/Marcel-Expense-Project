@@ -5,6 +5,9 @@ import {
   logout as logoutApi,
   getCurrentUser,
 } from "../api/authApi";
+import { tokenStorage } from "../utils/secureStorage";
+// import { useApiCall } from "../hooks/useApiCall";
+// import { useError } from "./ErrorContext";
 
 // Create auth context
 const AuthContext = createContext();
@@ -12,7 +15,8 @@ const AuthContext = createContext();
 // Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [token, setToken] = useState(tokenStorage.getToken() || null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -22,19 +26,18 @@ export const AuthProvider = ({ children }) => {
     const checkLoggedIn = async () => {
       if (token) {
         try {
-          const storedUser = localStorage.getItem("user");
+          const storedUser = tokenStorage.getUser();
           if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            setUser(storedUser);
           } else {
             // If we have token but no user data, fetch it
             const { data } = await getCurrentUser();
             setUser(data);
           }
         } catch (err) {
-          console.error("Error fetching user:", err);
+          // Error handled by error context
           // Clear invalid token/user data
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          tokenStorage.clearAll();
           setToken(null);
           setUser(null);
           navigate("/login");
@@ -46,6 +49,23 @@ export const AuthProvider = ({ children }) => {
     checkLoggedIn();
   }, [token, navigate]);
 
+  // Listen for logout events from error handling system
+  useEffect(() => {
+    const handleAuthLogout = (event) => {
+      // Auth logout event received
+      setUser(null);
+      setToken(null);
+      tokenStorage.clearAll();
+      navigate("/login");
+    };
+
+    window.addEventListener('auth:logout', handleAuthLogout);
+    
+    return () => {
+      window.removeEventListener('auth:logout', handleAuthLogout);
+    };
+  }, [navigate]);
+
   // Login function
   const login = async (credentials) => {
     setLoading(true);
@@ -54,6 +74,7 @@ export const AuthProvider = ({ children }) => {
       const data = await loginApi(credentials);
       setUser(data.user);
       setToken(data.token);
+      setIsAuthenticated(true);
       setLoading(false);
 
       // Redirect based on user role
@@ -80,11 +101,12 @@ export const AuthProvider = ({ children }) => {
     try {
       await logoutApi();
     } catch (err) {
-      console.error("Error during logout:", err);
+      // Error handled by error context
     } finally {
       // Always clear user data even if logout API fails
       setUser(null);
       setToken(null);
+      setIsAuthenticated(false);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       setLoading(false);
@@ -102,9 +124,9 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         token,
+        isAuthenticated,
         loading,
         error,
-        isAuthenticated: !!token,
         isAdmin: user?.role === "admin",
         isSalesRep: user?.role === "sales_rep",
         login,

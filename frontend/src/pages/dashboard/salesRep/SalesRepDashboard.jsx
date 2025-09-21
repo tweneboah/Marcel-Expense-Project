@@ -71,7 +71,7 @@ const SalesRepDashboard = () => {
           recentExpenses: recentExpenses.slice(0, 3),
         });
       } catch (err) {
-        console.error("Failed to fetch expense data:", err);
+        // Error handled by error context
         setError("Failed to load expense data. Please try again later.");
       } finally {
         setLoading(false);

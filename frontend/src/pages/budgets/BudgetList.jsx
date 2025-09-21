@@ -145,7 +145,7 @@ const BudgetList = () => {
         setFilteredBudgets(mockBudgets);
         setIsLoading(false);
       } catch (err) {
-        console.error("Error fetching budgets:", err);
+        // Error handled by error context
         setError("Failed to load budgets. Please try again later.");
         setIsLoading(false);
       }
@@ -235,19 +235,20 @@ const BudgetList = () => {
       // In production, call the actual API
       // await axios.delete(`/api/v1/budgets/${budgetToDelete._id}`);
 
-      // Mock delete
-      console.log(`Deleting budget with ID: ${budgetToDelete._id}`);
-
-      // Remove from state
-      setBudgets((prevBudgets) =>
-        prevBudgets.filter((budget) => budget._id !== budgetToDelete._id)
-      );
-
+      // Deleting budget
+      
+      await deleteBudget(budgetToDelete._id);
+      
+      // Remove the deleted budget from the list
+      setBudgets(budgets.filter(budget => budget._id !== budgetToDelete._id));
       setShowDeleteModal(false);
       setBudgetToDelete(null);
-      setIsLoading(false);
+      setSuccessMessage("Budget deleted successfully!");
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
-      console.error("Error deleting budget:", err);
+      // Error handled by error context
       setError("Failed to delete budget. Please try again.");
       setIsLoading(false);
     }

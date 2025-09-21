@@ -37,7 +37,7 @@ const TimeSummary = () => {
         setPeriodSummary(response.data);
       } catch (err) {
         setError("Failed to load period summary data");
-        console.error(err);
+        // Error handled by error context
       } finally {
         setLoading(false);
       }

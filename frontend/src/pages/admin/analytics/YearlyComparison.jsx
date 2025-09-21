@@ -41,7 +41,7 @@ const YearlyComparison = () => {
         setYearlyData(response.data);
       } catch (err) {
         setError("Failed to load yearly comparison data");
-        console.error(err);
+        // Error handled by error context
       } finally {
         setLoading(false);
       }

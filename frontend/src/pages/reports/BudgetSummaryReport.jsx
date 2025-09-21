@@ -36,7 +36,7 @@ const BudgetSummaryReport = () => {
       setError(null);
       try {
         const response = await API.get(`/budgets/summary?year=${selectedYear}`);
-        console.log("Budget summary response:", response);
+        // Budget summary response received
 
         if (response.data && response.data.success) {
           setSummaryData(response.data.data);
@@ -51,7 +51,7 @@ const BudgetSummaryReport = () => {
           setSummaryData(null);
         }
       } catch (err) {
-        console.error("Error fetching budget summary:", err);
+        // Error handled by error context
         // Don't set error for network errors or "no budgets found" errors, just show no data
         if (
           err.code === "ERR_NETWORK" ||

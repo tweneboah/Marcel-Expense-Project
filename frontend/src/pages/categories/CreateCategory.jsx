@@ -183,7 +183,7 @@ const CreateCategory = () => {
             budgetLimits,
           });
         } catch (err) {
-          console.error("Error fetching category:", err);
+          // Error handled by error context
           setError("Failed to load category data. Please try again.");
         } finally {
           setFetchLoading(false);
@@ -263,10 +263,7 @@ const CreateCategory = () => {
 
       navigate("/admin/categories");
     } catch (err) {
-      console.error(
-        isEditMode ? "Error updating category:" : "Error creating category:",
-        err
-      );
+      // Error handled by error context
       setError(
         err.response?.data?.message ||
           err.message ||

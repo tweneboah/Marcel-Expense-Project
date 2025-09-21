@@ -76,7 +76,7 @@ const SystemSettings = () => {
             ids[key] = response.data._id;
           }
         } catch (err) {
-          console.log(`No existing setting found for ${key}`);
+          // No existing setting found
           // This is fine, it just means the setting doesn't exist yet
         }
       });
@@ -84,7 +84,7 @@ const SystemSettings = () => {
       await Promise.all(fetchPromises);
       setSettingsIds(ids);
     } catch (error) {
-      console.error("Error loading setting IDs:", error);
+      // Error handled by error context
     } finally {
       setLoadingIds(false);
     }
@@ -194,7 +194,7 @@ const SystemSettings = () => {
         refreshSettings();
       }, 500);
     } catch (error) {
-      console.error("Error saving settings:", error);
+      // Error handled by error context
       toast.error("Failed to save settings. Please try again.");
     } finally {
       setSavingSettings(false);

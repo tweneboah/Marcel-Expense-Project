@@ -1,4 +1,5 @@
 import API from "./apiConfig";
+import { tokenStorage } from "../utils/secureStorage";
 
 // Register user
 export const register = async (userData) => {
@@ -10,10 +11,10 @@ export const register = async (userData) => {
 export const login = async (credentials) => {
   const response = await API.post("/auth/login", credentials);
 
-  // Store token and user data in localStorage
+  // Store token and user data securely
   if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+    tokenStorage.setToken(response.data.token);
+    tokenStorage.setUser(response.data.user);
   }
 
   return response.data;
@@ -23,9 +24,8 @@ export const login = async (credentials) => {
 export const logout = async () => {
   const response = await API.get("/auth/logout");
 
-  // Remove token and user data from localStorage
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+  // Remove token and user data securely
+  tokenStorage.clearAll();
 
   return response.data;
 };
@@ -56,8 +56,8 @@ export const updatePassword = async (passwordData) => {
 
   // Update token if a new one is returned
   if (response.data.token) {
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+    tokenStorage.setToken(response.data.token);
+    tokenStorage.setUser(response.data.user);
   }
 
   return response.data;
@@ -67,11 +67,11 @@ export const updatePassword = async (passwordData) => {
 export const updateProfile = async (profileData) => {
   const response = await API.put("/auth/updateprofile", profileData);
 
-  // Update user in localStorage if successful
+  // Update user in secure storage if successful
   if (response.data.success) {
-    const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const currentUser = tokenStorage.getUser() || {};
     const updatedUser = { ...currentUser, ...response.data.data };
-    localStorage.setItem("user", JSON.stringify(updatedUser));
+    tokenStorage.setUser(updatedUser);
   }
 
   return response.data;

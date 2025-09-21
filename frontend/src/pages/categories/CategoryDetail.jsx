@@ -130,10 +130,9 @@ const CategoryDetail = () => {
 
         // Use the dedicated function to fetch a category by ID
         const categoryData = await getCategoryById(id);
-        console.log("Category details:", categoryData);
         setCategory(categoryData);
       } catch (err) {
-        console.error("Error fetching category details:", err);
+        // Error handled by error context
         setError("Failed to load category details. Please try again later.");
       } finally {
         setLoading(false);

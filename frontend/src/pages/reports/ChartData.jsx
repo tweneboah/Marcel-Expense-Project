@@ -132,31 +132,15 @@ const ChartData = () => {
           ? apiChartType
           : "pie";
 
-        console.log(
-          `Fetching data for chart type: ${finalChartType} (${startDate} to ${endDate})`
-        );
+        // Fetching data for chart type
         const response = await API.get(
           `/advanced-reports/chart-data?chartType=${finalChartType}&startDate=${startDate}&endDate=${endDate}`
         );
 
         if (response.data && response.data.data) {
-          console.log(
-            `API Response for ${finalChartType}:`,
-            response.data.data
-          );
-          console.log(
-            "Response data structure:",
-            Object.keys(response.data.data)
-          );
+          // API response received
 
-          if (response.data.data.chartData) {
-            console.log(
-              "Chart data structure:",
-              Array.isArray(response.data.data.chartData)
-                ? "Array"
-                : Object.keys(response.data.data.chartData)
-            );
-          }
+          // Chart data structure analyzed
 
           // For line/bar charts, if we get pie chart data, transform it
           if (
@@ -164,7 +148,7 @@ const ChartData = () => {
             response.data.data.chartData &&
             Array.isArray(response.data.data.chartData)
           ) {
-            console.log("Transforming pie data to line/bar format");
+            // Transforming pie data to line/bar format
             // Transform pie chart data into line/bar chart format
             const transformedData = {
               chartType: chartType,
@@ -196,16 +180,16 @@ const ChartData = () => {
             };
             setChartData(transformedData);
           } else {
-        setChartData(response.data.data);
+            setChartData(response.data.data);
           }
         } else {
           // Handle empty response
-          console.error("Empty or invalid response from server:", response);
+          // Empty or invalid response from server
           setError("No data returned from the server");
         }
         setIsLoading(false);
       } catch (err) {
-        console.error("Error fetching chart data:", err);
+        // Error handled by error context
         setError(
           `Failed to load chart data: ${err.message || "Unknown error"}`
         );
@@ -227,10 +211,10 @@ const ChartData = () => {
 
       if (datasets.length > 0 && datasets[0].data) {
         // Convert line format to pie format
-      return {
+        return {
           labels,
-        datasets: [
-          {
+          datasets: [
+            {
               label: "Expense Distribution",
               data: datasets[0].data,
               backgroundColor:
@@ -297,7 +281,7 @@ const ChartData = () => {
       const datasets = chartData.datasets || [];
 
       if (datasets.length > 0) {
-      return {
+        return {
           labels,
           datasets: datasets.map((dataset) => ({
             ...dataset,
@@ -445,7 +429,7 @@ const ChartData = () => {
       chartData.datasets &&
       chartData.datasets.length > 0
     ) {
-    return {
+      return {
         labels: chartData.labels,
         datasets: chartData.datasets.map((dataset) => ({
           ...dataset,
@@ -628,13 +612,13 @@ const ChartData = () => {
 
     // Add specific options based on chart type
     if (chartType === "doughnut") {
-    return {
+      return {
         ...baseOptions,
         cutout: "70%",
         borderWidth: 2,
-      plugins: {
+        plugins: {
           ...baseOptions.plugins,
-        legend: {
+          legend: {
             ...baseOptions.plugins.legend,
             position: "right",
           },
@@ -656,9 +640,9 @@ const ChartData = () => {
                 return `${label}: CHF ${value.toFixed(2)} (${percentage}%)`;
               },
             },
+          },
         },
-      },
-    };
+      };
     } else if (chartType === "pie") {
       return {
         ...baseOptions,
@@ -688,7 +672,7 @@ const ChartData = () => {
         },
       };
     } else if (chartType === "line") {
-    return {
+      return {
         ...baseOptions,
         scales: {
           y: {
@@ -722,7 +706,7 @@ const ChartData = () => {
           point: {
             backgroundColor: brandColors.primary,
             borderColor: "#fff",
-          borderWidth: 2,
+            borderWidth: 2,
             hoverRadius: 8,
             hoverBorderWidth: 3,
           },
@@ -792,23 +776,23 @@ const ChartData = () => {
 
   const renderChart = () => {
     if (!chartData || !chartType) {
-    return (
+      return (
         <div className="flex items-center justify-center h-64">
           <p className="text-gray-500">Select chart type to view data</p>
-      </div>
-    );
-  }
+        </div>
+      );
+    }
 
     if (chartData.error) {
-    return (
+      return (
         <div className="flex items-center justify-center h-64">
           <p className="text-red-500">{chartData.error}</p>
-      </div>
-    );
-  }
+        </div>
+      );
+    }
 
     if (!hasValidData()) {
-  return (
+      return (
         <div className="flex items-center justify-center h-64">
           <p className="text-gray-500">
             No data available for the selected period
@@ -832,7 +816,7 @@ const ChartData = () => {
         case "line":
           // For line charts, check if data is at the top level (not nested)
           if (chartData.datasets && chartData.labels) {
-            console.log("Using top-level line chart data directly");
+            // Using top-level line chart data directly
 
             const enhancedData = {
               labels: chartData.labels,
@@ -853,7 +837,7 @@ const ChartData = () => {
             chartData.chartData?.labels
           ) {
             // Use nested data
-            console.log("Using nested line chart data");
+            // Using nested line chart data
 
             const enhancedData = {
               labels: chartData.chartData.labels,
@@ -874,7 +858,7 @@ const ChartData = () => {
           return (
             <div className="flex items-center justify-center h-64">
               <p className="text-gray-500">Invalid line chart data format</p>
-        </div>
+            </div>
           );
         case "bar":
           return <Bar data={getBarChartData()} options={getChartOptions()} />;
@@ -882,11 +866,11 @@ const ChartData = () => {
           return (
             <div className="flex items-center justify-center h-64">
               <p className="text-gray-500">Select a valid chart type</p>
-      </div>
+            </div>
           );
       }
     } catch (error) {
-      console.error("Error rendering chart:", error);
+      // Error handled by error context
       return (
         <div className="flex items-center justify-center h-64">
           <p className="text-red-500">Error rendering chart: {error.message}</p>
@@ -953,7 +937,7 @@ const ChartData = () => {
   };
 
   const hasValidData = () => {
-    console.log("Checking data validity:", chartData);
+    // Checking data validity
 
     try {
       // If we have pie/doughnut chart data
@@ -999,7 +983,7 @@ const ChartData = () => {
             (dataset && dataset.data && dataset.data.length > 0) ||
             dataset.totalValue !== undefined
         );
-        console.log("Has datasets with data:", hasDatasets);
+        // Has datasets with data
         return hasDatasets;
       }
 
@@ -1007,17 +991,15 @@ const ChartData = () => {
       if (chartType === "line" || chartType === "bar") {
         // If we have a period and chartType, assume we can generate at least something
         if (chartData.chartType && chartData.period) {
-          console.log(
-            "Minimal chart data detected - will try to create visualization"
-          );
+          // Minimal chart data detected - will try to create visualization
           return true;
         }
       }
 
-      console.log("No valid data found for visualization");
+      // No valid data found for visualization
       return false;
     } catch (err) {
-      console.error("Error checking data validity:", err);
+      // Error handled by error context
       return false;
     }
   };
@@ -1103,8 +1085,8 @@ const ChartData = () => {
                         backgroundColor: categoryColor,
                       }}
                     ></div>
-            </div>
-          </div>
+                  </div>
+                </div>
               </td>
             </motion.tr>
           );
@@ -1176,8 +1158,8 @@ const ChartData = () => {
                         backgroundColor: categoryColor,
                       }}
                     ></div>
-            </div>
-          </div>
+                  </div>
+                </div>
               </td>
             </motion.tr>
           );
@@ -1246,8 +1228,8 @@ const ChartData = () => {
                       backgroundColor: categoryColor,
                     }}
                   ></div>
-          </div>
-        </div>
+                </div>
+              </div>
             </td>
           </motion.tr>
         );
@@ -1296,8 +1278,8 @@ const ChartData = () => {
                       backgroundColor: categoryColor,
                     }}
                   ></div>
-        </div>
-      </div>
+                </div>
+              </div>
             </td>
           </motion.tr>
         );
@@ -1345,8 +1327,8 @@ const ChartData = () => {
                       backgroundColor: categoryColor,
                     }}
                   ></div>
+                </div>
               </div>
-            </div>
             </td>
           </motion.tr>
         );
@@ -1370,7 +1352,7 @@ const ChartData = () => {
           ? dataset.backgroundColor[index]
           : dataset.borderColor || brandColors.primary;
 
-                  return (
+        return (
           <motion.tr
             key={index}
             className="hover:bg-gray-50"
@@ -1378,29 +1360,29 @@ const ChartData = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 * index, duration: 0.3 }}
           >
-                      <td className="px-4 py-3 flex items-center">
-                        <div
-                          className="w-3 h-3 rounded-full mr-2"
+            <td className="px-4 py-3 flex items-center">
+              <div
+                className="w-3 h-3 rounded-full mr-2"
                 style={{ backgroundColor: categoryColor }}
-                        ></div>
+              ></div>
               <span className="font-medium">{label}</span>
-                      </td>
-                      <td className="px-4 py-3 text-right font-medium">
+            </td>
+            <td className="px-4 py-3 text-right font-medium">
               CHF {value.toFixed(2)}
-                      </td>
-                      <td className="px-4 py-3 text-right">
+            </td>
+            <td className="px-4 py-3 text-right">
               <div className="flex items-center justify-end">
                 <span className="mr-2">{percentage}%</span>
                 <div className="w-24 bg-gray-200 rounded-full h-2">
-                          <div
-                            className="h-2 rounded-full"
-                            style={{
-                              width: `${percentage}%`,
+                  <div
+                    className="h-2 rounded-full"
+                    style={{
+                      width: `${percentage}%`,
                       backgroundColor: categoryColor,
-                            }}
-                          ></div>
+                    }}
+                  ></div>
                 </div>
-                        </div>
+              </div>
             </td>
           </motion.tr>
         );
@@ -1411,9 +1393,9 @@ const ChartData = () => {
       <tr>
         <td colSpan="3" className="px-4 py-3 text-center">
           No data available
-                      </td>
-                    </tr>
-                  );
+        </td>
+      </tr>
+    );
   };
 
   if (isLoading) {
@@ -1621,18 +1603,18 @@ const ChartData = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y">{getCategoryRows()}</tbody>
-              <tfoot className="bg-gray-50 font-medium">
-                <tr>
-                  <td className="px-4 py-3">Total</td>
-                  <td className="px-4 py-3 text-right">
+                <tfoot className="bg-gray-50 font-medium">
+                  <tr>
+                    <td className="px-4 py-3">Total</td>
+                    <td className="px-4 py-3 text-right">
                       CHF {getTotalValue().toFixed(2)}
-                  </td>
-                  <td className="px-4 py-3 text-right">100%</td>
-                </tr>
-              </tfoot>
-            </table>
+                    </td>
+                    <td className="px-4 py-3 text-right">100%</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
-        </div>
         </motion.div>
       )}
     </motion.div>

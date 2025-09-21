@@ -560,7 +560,7 @@ const CategoryList = () => {
           currentPage: appliedFilters.page || 1,
         });
       } catch (err) {
-        console.error("Error fetching categories:", err);
+        // Error handled by error context
         setError("Failed to load categories. Please try again later.");
         setCategories([]);
       } finally {

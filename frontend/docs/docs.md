@@ -1,6 +1,17 @@
-# Google Maps API Key
+# Google Maps API Key Configuration
 
-VITE_GOOGLE_MAPS_API_KEY=AIzaSyBmSjzDusBg-elrYYeZ8ODJ69slrZt-ljw
+⚠️ **SECURITY WARNING**: Never commit actual API keys to version control!
+
+```bash
+# Example environment variable (use your own API key)
+VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key-here
+```
+
+**Setup Instructions:**
+1. Get your API key from [Google Cloud Console](https://console.cloud.google.com/)
+2. Enable Maps JavaScript API and Places API
+3. Add your key to `.env` file (never commit this file)
+4. Restrict API key usage to your domain in production
 
 use Swiss Francs = CHF currency
 Expense app MERN-Stack Introduction

@@ -70,7 +70,7 @@ const ExpenseForecasting = () => {
         //   setIsLoading(false);
         // }, 1000);
       } catch (err) {
-        console.error("Error fetching forecast data:", err);
+        // Error handled by error context
         setError("Failed to load forecast data. Please try again later.");
         setIsLoading(false);
       }

@@ -58,7 +58,7 @@ const EditBudget = () => {
           setError("Failed to fetch budget details");
         }
       } catch (err) {
-        console.error("Error fetching budget details:", err);
+        // Error handled by error context
         setError(
           err.response?.data?.message || "Failed to fetch budget details"
         );
@@ -76,7 +76,7 @@ const EditBudget = () => {
           setError("Failed to load categories");
         }
       } catch (err) {
-        console.error("Error fetching categories:", err);
+        // Error handled by error context
         setError(err.response?.data?.message || "Failed to load categories");
       }
     };
@@ -112,7 +112,7 @@ const EditBudget = () => {
         throw new Error(response.data?.message || "Failed to update budget");
       }
     } catch (err) {
-      console.error("Error updating budget:", err);
+      // Error handled by error context
       setError(
         err.response?.data?.message ||
           err.message ||

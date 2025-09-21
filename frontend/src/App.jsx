@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
+import { ErrorProvider } from "./context/ErrorContext";
+import ErrorBoundary from "./components/error/ErrorBoundary";
+import ErrorToast from "./components/error/ErrorToast";
 import PublicRoutes from "./routes/PublicRoutes";
 import AdminRoutes from "./routes/AdminRoutes";
 import SalesRepRoutes from "./routes/SalesRepRoutes";
@@ -19,9 +22,12 @@ function App() {
   }
 
   return (
-    <SettingsProvider>
-      {/* <GoogleMapComponent /> */}
-      <Routes>
+    <ErrorProvider>
+      <ErrorBoundary componentName="App">
+        <SettingsProvider>
+          <ErrorToast />
+          {/* <GoogleMapComponent /> */}
+          <Routes>
         {/* Public routes - accessible when not authenticated */}
         {!isAuthenticated ? (
           <Route path="/*" element={<PublicRoutes />} />
@@ -68,7 +74,9 @@ function App() {
           </>
         )}
       </Routes>
-    </SettingsProvider>
+        </SettingsProvider>
+      </ErrorBoundary>
+    </ErrorProvider>
   );
 }
 

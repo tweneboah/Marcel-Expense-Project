@@ -67,7 +67,7 @@ const AdvancedFilteredExpenses = () => {
         //   ]);
         // }, 300);
       } catch (err) {
-        console.error("Error fetching categories:", err);
+        // Error handled by error context
         // Fallback to default categories if API fails
         setCategories([
           { id: "fuel", name: "Fuel", color: "#FF5722" },
@@ -113,12 +113,8 @@ const AdvancedFilteredExpenses = () => {
         if (searchTerm) params.search = searchTerm;
       }
 
-      console.log("Fetching expenses with params:", params);
-
       // Use API instance with auth headers
       const response = await API.get(`/advanced-reports/expenses`, { params });
-
-      console.log("Response:", response.data);
 
       // Map the API response to our component structure
       if (response.data && response.data.data) {
@@ -159,7 +155,7 @@ const AdvancedFilteredExpenses = () => {
 
       setIsLoading(false);
     } catch (err) {
-      console.error("Error fetching expenses:", err);
+      // Error handled by error context
       setError("Failed to load expenses. Please try again later.");
       setIsLoading(false);
     }

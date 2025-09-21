@@ -74,7 +74,7 @@ export const SettingsProvider = ({ children }) => {
       setLoading(false);
     } catch (err) {
       if (isMountedRef.current) {
-        console.error("Error fetching settings:", err);
+        // Error handled by error context
         setError("Failed to load application settings");
         setLoading(false);
       }
@@ -100,7 +100,7 @@ export const SettingsProvider = ({ children }) => {
     refreshSettings: () => fetchSettings(true),
     // Include a legacy handler for backward compatibility
     getDefaultSettings: () => {
-      console.warn("getDefaultSettings is deprecated");
+      // getDefaultSettings is deprecated
       return Promise.resolve({
         success: true,
         data: Object.keys(defaultSettings).map((key) => ({

@@ -40,7 +40,7 @@ const CategoryBreakdown = () => {
         setCategoryData(response.data);
       } catch (err) {
         setError("Failed to load category breakdown data");
-        console.error(err);
+        // Error handled by error context
       } finally {
         setLoading(false);
       }

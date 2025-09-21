@@ -22,6 +22,7 @@ import {
 import { createBudget, getBudgets } from "../../api/budgetApi";
 import { getExpenseCategories } from "../../api/expenseApi";
 import { useAuth } from "../../context/AuthContext";
+import { tokenStorage } from "../../utils/secureStorage";
 
 const CreateBudget = () => {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const CreateBudget = () => {
     try {
       setLoadingCategories(true);
       const response = await getExpenseCategories();
-      console.log("Categories response:", response);
+      // Categories loaded successfully
 
       // Handle different response structures
       if (response && response.categories) {
@@ -96,11 +97,11 @@ const CreateBudget = () => {
       ) {
         setCategories(response.data.data);
       } else {
-        console.warn("Unexpected categories response structure:", response);
-        setError("No categories found. Please create a category first.");
-      }
-    } catch (err) {
-      console.error("Error fetching categories:", err);
+          // Unexpected response structure, using empty array
+          setCategories([]);
+        }
+      } catch (err) {
+        // Error handled by error context
       setError("Failed to load categories. Please try again later.");
     } finally {
       setLoadingCategories(false);
@@ -123,12 +124,11 @@ const CreateBudget = () => {
 
       // Check if categories are loaded, and if not, load them first
       if (categories.length === 0 && !loadingCategories) {
-        console.log("Categories not loaded, fetching categories first");
         await fetchCategories();
       }
 
       // Use direct API call to /api/v1/budgets instead of utility function
-      const token = localStorage.getItem("token");
+      const token = tokenStorage.getToken();
       if (!token) {
         setBudgetError("Authentication token not found. Please log in again.");
         setLoadingBudgets(false);
@@ -151,7 +151,6 @@ const CreateBudget = () => {
       }
 
       const responseData = await response.json();
-      console.log("Budgets API response:", responseData);
 
       // Handle different response structures
       let budgetsData = [];
@@ -166,7 +165,7 @@ const CreateBudget = () => {
       } else if (Array.isArray(responseData)) {
         budgetsData = responseData;
       } else {
-        console.warn("Unexpected budgets response structure:", responseData);
+        // Unexpected response structure
         setBudgetError(
           "Failed to load existing budgets. Unexpected data format."
         );
@@ -174,25 +173,14 @@ const CreateBudget = () => {
         return;
       }
 
-      // Add debug info for each budget
-      const budgetsWithDebug = budgetsData.map((budget) => {
-        // Check if this budget has category info
-        const hasCategory = budget.category || budget.categoryId;
-        const categoryName = getCategoryNameForBudget(budget);
-
-        console.log(`Budget ${budget._id || "unknown"} category info:`, {
-          hasCategory,
-          categoryName,
-          categoryField: budget.category,
-          categoryIdField: budget.categoryId,
-        });
-
+      // Process budgets data
+      const processedBudgets = budgetsData.map((budget) => {
         return budget;
       });
 
-      setExistingBudgets(budgetsWithDebug);
+      setExistingBudgets(processedBudgets);
     } catch (err) {
-      console.error("Error fetching existing budgets:", err);
+      // Error handled by error context
       setBudgetError(
         "Failed to load existing budgets. Please try again later."
       );
@@ -276,10 +264,7 @@ const CreateBudget = () => {
         criticalThreshold: parseFloat(formData.criticalThreshold) || 90,
       };
 
-      console.log("Submitting budget data:", budgetData);
-
       const response = await createBudget(budgetData);
-      console.log("Budget creation succeeded:", response);
 
       if (response && (response.success || response.data || response._id)) {
         // Get the created budget ID
@@ -316,11 +301,10 @@ const CreateBudget = () => {
       } else {
         const errorMessage =
           response?.message || "Failed to create budget. Please try again.";
-        console.error("Budget creation failed:", errorMessage);
         setError(errorMessage);
       }
     } catch (err) {
-      console.error("Budget creation error:", err);
+      // Error handled by error context
 
       // Handle different types of errors
       if (err.message && typeof err.message === "string") {
@@ -349,8 +333,8 @@ const CreateBudget = () => {
     try {
       setError(null);
 
-      // Get token from localStorage
-      const token = localStorage.getItem("token");
+      // Get token from secure storage
+      const token = tokenStorage.getToken();
       if (!token) {
         setError("No authentication token found. Please log in again.");
         return;
@@ -376,10 +360,9 @@ const CreateBudget = () => {
       });
 
       const data = await response.json();
-      console.log("Direct API test response:", data);
 
       if (response.ok) {
-        alert("Direct API call succeeded! Check console for details.");
+        alert("Direct API call succeeded!");
       } else {
         setError(
           `Direct API test failed: ${
@@ -388,7 +371,7 @@ const CreateBudget = () => {
         );
       }
     } catch (err) {
-      console.error("Direct API test error:", err);
+      // Error handled by error context
       setError(`Direct API test error: ${err.message}`);
     }
   };

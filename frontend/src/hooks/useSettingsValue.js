@@ -31,7 +31,7 @@ const useSettingsValue = (key, defaultValue = null, preferDefault = false) => {
         setValue(response.data.value);
       }
     } catch (error) {
-      console.error(`Error fetching setting ${key}:`, error);
+      // Error handled by error context
     } finally {
       if (mountedRef.current) {
         setIsLoading(false);

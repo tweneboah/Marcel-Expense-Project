@@ -52,7 +52,6 @@ const PlaceAutocomplete = ({
         const results = await getPlaceSuggestions(query);
         setSuggestions(results || []);
       } catch (error) {
-        console.error("Error fetching suggestions:", error);
         setSuggestions([]);
       } finally {
         setIsLoading(false);
@@ -73,7 +72,6 @@ const PlaceAutocomplete = ({
   };
 
   const handleSuggestionClick = (suggestion) => {
-    console.log("Selected suggestion:", suggestion); // Debug log
     setQuery(suggestion.description);
     onChange && onChange(suggestion.description);
     onPlaceSelect &&
