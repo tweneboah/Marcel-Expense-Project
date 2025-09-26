@@ -1,0 +1,5 @@
+# Netlify redirects file
+# This handles client-side routing for React Router
+# All routes should serve the index.html file so React Router can handle routing
+
+/*    /index.html   200

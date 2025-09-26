@@ -1,9 +1,15 @@
 import axios from "axios";
 import { tokenStorage } from "../utils/secureStorage";
-import { parseError, logError, ERROR_TYPES, ERROR_SEVERITY } from "../utils/errorHandler";
+import {
+  parseError,
+  logError,
+  ERROR_TYPES,
+  ERROR_SEVERITY,
+} from "../utils/errorHandler";
 
 // Define the base URL from environment variables with fallback
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 export const BASE_URL = `${API_BASE_URL}/api/v1`;
 
 // Create axios instance with base URL
@@ -25,9 +31,9 @@ const RETRY_DELAY = 1000; // 1 second
 
 // Circuit breaker states
 const CIRCUIT_STATES = {
-  CLOSED: 'CLOSED',     // Normal operation
-  OPEN: 'OPEN',         // Circuit is open, requests fail fast
-  HALF_OPEN: 'HALF_OPEN' // Testing if service is back
+  CLOSED: "CLOSED", // Normal operation
+  OPEN: "OPEN", // Circuit is open, requests fail fast
+  HALF_OPEN: "HALF_OPEN", // Testing if service is back
 };
 
 // Circuit breaker storage
@@ -37,23 +43,23 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 // Fallback data for critical endpoints
 const fallbackData = {
-  '/settings': {
+  "/settings": {
     success: true,
     data: [],
-    message: 'Using cached settings data'
+    message: "Using cached settings data",
   },
-  '/expenses': {
+  "/expenses": {
     success: true,
     data: [],
     pagination: { page: 1, limit: 10, total: 0 },
-    message: 'Using cached expenses data'
+    message: "Using cached expenses data",
   },
-  '/budgets': {
+  "/budgets": {
     success: true,
     data: [],
     pagination: { page: 1, limit: 10, total: 0 },
-    message: 'Using cached budgets data'
-  }
+    message: "Using cached budgets data",
+  },
 };
 
 // Helper function to get circuit breaker for endpoint
@@ -63,7 +69,7 @@ const getCircuitBreaker = (endpoint) => {
       state: CIRCUIT_STATES.CLOSED,
       failureCount: 0,
       lastFailureTime: null,
-      lastSuccessTime: null
+      lastSuccessTime: null,
     };
   }
   return circuitBreakers[endpoint];
@@ -71,8 +77,10 @@ const getCircuitBreaker = (endpoint) => {
 
 // Helper function to check if circuit should be half-open
 const shouldAttemptReset = (breaker) => {
-  return breaker.state === CIRCUIT_STATES.OPEN && 
-         Date.now() - breaker.lastFailureTime > CIRCUIT_BREAKER_TIMEOUT;
+  return (
+    breaker.state === CIRCUIT_STATES.OPEN &&
+    Date.now() - breaker.lastFailureTime > CIRCUIT_BREAKER_TIMEOUT
+  );
 };
 
 // Helper function to get cached response
@@ -82,7 +90,7 @@ const getCachedResponse = (cacheKey) => {
     return {
       ...cached.data,
       fromCache: true,
-      cacheAge: Date.now() - cached.timestamp
+      cacheAge: Date.now() - cached.timestamp,
     };
   }
   return null;
@@ -92,43 +100,43 @@ const getCachedResponse = (cacheKey) => {
 const cacheResponse = (cacheKey, data) => {
   responseCache.set(cacheKey, {
     data: data,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 };
 
 // Helper function to get fallback response
-const getFallbackResponse = (endpoint, method = 'GET') => {
+const getFallbackResponse = (endpoint, method = "GET") => {
   // Try to find a matching fallback pattern
-  const fallbackKey = Object.keys(fallbackData).find(key => 
-    endpoint.includes(key) || endpoint.startsWith(key)
+  const fallbackKey = Object.keys(fallbackData).find(
+    (key) => endpoint.includes(key) || endpoint.startsWith(key)
   );
-  
+
   if (fallbackKey) {
     return {
       data: {
         ...fallbackData[fallbackKey],
         fallback: true,
         endpoint: endpoint,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       status: 200,
-      statusText: 'OK (Fallback)',
-      config: { url: endpoint, method }
+      statusText: "OK (Fallback)",
+      config: { url: endpoint, method },
     };
   }
-  
+
   // Generic fallback for unknown endpoints
   return {
     data: {
       success: false,
-      message: 'Service temporarily unavailable. Please try again later.',
+      message: "Service temporarily unavailable. Please try again later.",
       fallback: true,
       endpoint: endpoint,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     },
     status: 503,
-    statusText: 'Service Unavailable (Fallback)',
-    config: { url: endpoint, method }
+    statusText: "Service Unavailable (Fallback)",
+    config: { url: endpoint, method },
   };
 };
 
@@ -138,13 +146,14 @@ const retryRequest = async (config, attempt = 1) => {
     const response = await axios(config);
     return response;
   } catch (error) {
-    if (attempt < RETRY_ATTEMPTS && 
-        error.response?.status >= 500 && 
-        error.response?.status < 600) {
-      
+    if (
+      attempt < RETRY_ATTEMPTS &&
+      error.response?.status >= 500 &&
+      error.response?.status < 600
+    ) {
       const delay = RETRY_DELAY * Math.pow(2, attempt - 1); // Exponential backoff
-      
-      await new Promise(resolve => setTimeout(resolve, delay));
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
       return retryRequest(config, attempt + 1);
     }
     throw error;
@@ -155,7 +164,7 @@ const retryRequest = async (config, attempt = 1) => {
 API.interceptors.request.use(
   (config) => {
     const endpoint = config.url;
-    const method = config.method?.toUpperCase() || 'GET';
+    const method = config.method?.toUpperCase() || "GET";
     const now = Date.now();
     const cacheKey = `${method}:${endpoint}`;
 
@@ -169,18 +178,20 @@ API.interceptors.request.use(
         breaker.state = CIRCUIT_STATES.HALF_OPEN;
       } else {
         // Circuit is open, try fallback strategies
-        
+
         // 1. Try cached response first
         const cachedResponse = getCachedResponse(cacheKey);
         if (cachedResponse) {
-          throw { __MOCK_RESPONSE__: { 
-            data: cachedResponse, 
-            status: 200, 
-            statusText: "OK (Cached)", 
-            config 
-          }};
+          throw {
+            __MOCK_RESPONSE__: {
+              data: cachedResponse,
+              status: 200,
+              statusText: "OK (Cached)",
+              config,
+            },
+          };
         }
-        
+
         // 2. Use fallback data
         const fallbackResponse = getFallbackResponse(endpoint, method);
         throw { __MOCK_RESPONSE__: fallbackResponse };
@@ -193,7 +204,6 @@ API.interceptors.request.use(
       if (timeDiff < THROTTLE_WINDOW) {
         recentCalls[endpoint].count++;
         if (recentCalls[endpoint].count > MAX_CALLS_PER_WINDOW) {
-          
           // Try cached response first
           const cachedResponse = getCachedResponse(cacheKey);
           if (cachedResponse) {
@@ -202,18 +212,20 @@ API.interceptors.request.use(
               ...config,
               headers: {
                 ...config?.headers,
-                Authorization: '[REDACTED]' // Remove token from config
-              }
+                Authorization: "[REDACTED]", // Remove token from config
+              },
             };
-            
-            throw { __MOCK_RESPONSE__: { 
-              data: cachedResponse, 
-              status: 200, 
-              statusText: "OK (Cached)", 
-              config: sanitizedConfig 
-            }};
+
+            throw {
+              __MOCK_RESPONSE__: {
+                data: cachedResponse,
+                status: 200,
+                statusText: "OK (Cached)",
+                config: sanitizedConfig,
+              },
+            };
           }
-          
+
           // Return last response if available
           if (recentCalls[endpoint].lastResponse) {
             // Sanitize config to remove sensitive headers
@@ -221,18 +233,20 @@ API.interceptors.request.use(
               ...config,
               headers: {
                 ...config?.headers,
-                Authorization: '[REDACTED]' // Remove token from config
-              }
+                Authorization: "[REDACTED]", // Remove token from config
+              },
             };
-            
-            throw { __MOCK_RESPONSE__: {
-              data: recentCalls[endpoint].lastResponse,
-              status: 200,
-              statusText: "OK (Throttled Cache)",
-              config: sanitizedConfig,
-            }};
+
+            throw {
+              __MOCK_RESPONSE__: {
+                data: recentCalls[endpoint].lastResponse,
+                status: 200,
+                statusText: "OK (Throttled Cache)",
+                config: sanitizedConfig,
+              },
+            };
           }
-          
+
           throw new axios.Cancel(
             `Circuit breaker: Too many calls to ${endpoint}`
           );
@@ -252,7 +266,7 @@ API.interceptors.request.use(
         data: {
           success: true,
           data: [],
-          message: "Deprecated endpoint - use /settings instead"
+          message: "Deprecated endpoint - use /settings instead",
         },
       };
       throw { __MOCK_RESPONSE__: mockResponse };
@@ -277,9 +291,9 @@ API.interceptors.request.use(
 API.interceptors.response.use(
   (response) => {
     const endpoint = response.config.url;
-    const method = response.config.method?.toUpperCase() || 'GET';
+    const method = response.config.method?.toUpperCase() || "GET";
     const cacheKey = `${method}:${endpoint}`;
-    
+
     // Update circuit breaker on successful response
     const breaker = getCircuitBreaker(endpoint);
     if (breaker.state === CIRCUIT_STATES.HALF_OPEN) {
@@ -294,7 +308,7 @@ API.interceptors.response.use(
     }
 
     // Cache successful GET responses for fallback
-    if (method === 'GET' && response.data && response.status === 200) {
+    if (method === "GET" && response.data && response.status === 200) {
       cacheResponse(cacheKey, response.data);
     }
 
@@ -302,7 +316,7 @@ API.interceptors.response.use(
     if (recentCalls[endpoint]) {
       recentCalls[endpoint].lastResponse = response.data;
     }
-    
+
     return response;
   },
   async (error) => {
@@ -312,7 +326,7 @@ API.interceptors.response.use(
     }
 
     const endpoint = error.config?.url;
-    const method = error.config?.method?.toUpperCase() || 'GET';
+    const method = error.config?.method?.toUpperCase() || "GET";
     const cacheKey = `${method}:${endpoint}`;
 
     // Update circuit breaker on error
@@ -320,11 +334,11 @@ API.interceptors.response.use(
       const breaker = getCircuitBreaker(endpoint);
       const isServerError = error.response?.status >= 500;
       const isNetworkError = !error.response && error.request;
-      
+
       if (isServerError || isNetworkError) {
         breaker.failureCount++;
         breaker.lastFailureTime = Date.now();
-        
+
         if (breaker.failureCount >= CIRCUIT_BREAKER_THRESHOLD) {
           breaker.state = CIRCUIT_STATES.OPEN;
         }
@@ -332,7 +346,11 @@ API.interceptors.response.use(
     }
 
     // Try retry mechanism for server errors
-    if (error.response?.status >= 500 && error.response?.status < 600 && error.config) {
+    if (
+      error.response?.status >= 500 &&
+      error.response?.status < 600 &&
+      error.config
+    ) {
       try {
         const retryResponse = await retryRequest(error.config);
         return retryResponse;
@@ -351,20 +369,20 @@ API.interceptors.response.use(
           ...error.config,
           headers: {
             ...error.config?.headers,
-            Authorization: '[REDACTED]' // Remove token from config
-          }
+            Authorization: "[REDACTED]", // Remove token from config
+          },
         };
-        
+
         return {
           data: cachedResponse,
           status: 200,
-          statusText: 'OK (Cached Fallback)',
-          config: sanitizedConfig
+          statusText: "OK (Cached Fallback)",
+          config: sanitizedConfig,
         };
       }
-      
+
       // For GET requests, try fallback data
-      if (method === 'GET') {
+      if (method === "GET") {
         const fallbackResponse = getFallbackResponse(endpoint, method);
         return fallbackResponse;
       }
@@ -372,7 +390,7 @@ API.interceptors.response.use(
 
     // Use centralized error handling
     const parsedError = parseError(error);
-    
+
     // Log the error with enhanced context (sanitized for security)
     const sanitizedContext = {
       endpoint: endpoint || "unknown endpoint",
@@ -382,12 +400,12 @@ API.interceptors.response.use(
       responseData: error.response?.data,
       // Only log request data, not headers which may contain tokens
       requestData: error.config?.data,
-      circuitState: endpoint ? getCircuitBreaker(endpoint).state : 'unknown',
+      circuitState: endpoint ? getCircuitBreaker(endpoint).state : "unknown",
       retryAttempted: error.config?._retryCount > 0,
-      api: true
+      api: true,
       // Explicitly exclude headers to prevent token exposure
     };
-    
+
     logError(parsedError, sanitizedContext);
 
     // Handle authentication errors
@@ -396,11 +414,13 @@ API.interceptors.response.use(
       tokenStorage.clearAll();
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      
+
       // Dispatch custom event for auth context to handle
-      window.dispatchEvent(new CustomEvent('auth:logout', { 
-        detail: { reason: 'api_authentication_error' } 
-      }));
+      window.dispatchEvent(
+        new CustomEvent("auth:logout", {
+          detail: { reason: "api_authentication_error" },
+        })
+      );
     }
 
     // Create enhanced error object with standardized structure
@@ -415,9 +435,9 @@ API.interceptors.response.use(
       // Add API-specific metadata
       endpoint: endpoint,
       method: method,
-      circuitState: endpoint ? getCircuitBreaker(endpoint).state : 'unknown',
+      circuitState: endpoint ? getCircuitBreaker(endpoint).state : "unknown",
       timestamp: new Date().toISOString(),
-      fallbackAttempted: true
+      fallbackAttempted: true,
     };
 
     return Promise.reject(enhancedError);
